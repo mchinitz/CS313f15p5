@@ -283,35 +283,4 @@ public class TouchMe extends Activity {
     }
 
 
-    public static class Constants {
-
-        private static int width, height;
-
-        //TODO cite http://stackoverflow.com/questions/1016896/get-screen-dimensions-in-pixels
-
-        public Constants(Activity activity) {
-
-            WindowManager windowManager = activity.getWindowManager();
-            Display display = windowManager.getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            width = size.x;
-            height = size.y;
-
-        }
-
-        public static int get_width()
-        {
-            return width;
-        }
-
-        public static int get_height()
-        {
-            return height;
-        }
-
-        //and necessarily no setter methods
-
-    }
-
 }

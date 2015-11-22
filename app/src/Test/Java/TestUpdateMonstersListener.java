@@ -11,6 +11,7 @@ import static junit.framework.Assert.assertEquals;
 
 import java.util.List;
 
+//The point of mockito here is because we want a mock view
 import static org.mockito.Mockito.*;
 
 /**
