@@ -1,8 +1,10 @@
 package com.oreilly.demo.android.pa.uidemo;
 
+import android.graphics.Color;
 import android.view.View;
 
 import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -14,19 +16,16 @@ public abstract class UpdateMonstersListener implements observer {
 
     private Model model;
     private View view;
-    private int m,n; //dimensions of board
-
-    public UpdateMonstersListener(Model model, View view, int m, int n)
+    private Random random;
+    public UpdateMonstersListener(Model model, View view)
     {
         this.model = model;
         this.view = view;
-        this.m = m;
-        this.n = n;
+        random = new Random();
     }
 
     public void draw_monster(int x, int y)
     {
-        throw new RuntimeException("Not implemented");
     }
 
     //returns the coordinates of the location at which the mouse is pressed by the user
@@ -35,17 +34,48 @@ public abstract class UpdateMonstersListener implements observer {
     @Override
     public Object update() {
         if (model.get_status())
-            draw_monster(get_coordinates()[0], get_coordinates()[1]);
-        else
-       {
-           for (int i=0; i<m; i++) {
-               for (int j = 0; j < n; j++) {
-                   draw_monster(i, j);
-               }
-           }
-       }
+            model.monsters[get_coordinates()[0]][get_coordinates()[1]].clear();
+        else {
+            List<Monster> cpy_board [][] = model.clone_monsters_list(model.monsters);
+            int m = model.monsters.length;
+            int n = model.monsters[0].length;
+            if (m <= 1 && n <= 1)
+                throw new AssertionError();
+            //do random movements here
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    int len = model.monsters[i][j].size();
+                    for (int k = len - 1; k >= 0; k --) {
+                        while (true) {
+                            int deltaX = random.nextInt(3) - 1;
+                            int deltaY = random.nextInt(3) - 1;
+                            if ((deltaX != 0 || deltaY != 0) && (i + deltaX >= 0) && (i + deltaX < m) && (j + deltaY >= 0) && (j + deltaY < n)) // if in bounds
+                            {
+                                int new_data[] = new int[3];
+                                new_data[0] = i + deltaX;
+                                new_data[1] = j + deltaY;
+                                if (random.nextInt(2) == 1)
+                                    new_data[2] = Color.GREEN;
+                                else
+                                    new_data[2] = Color.YELLOW;
+                                cpy_board[i][j].get(k).set_data(new_data);
+                                cpy_board[new_data[0]][new_data[1]].add(cpy_board[i][j].get(k));
+                                cpy_board[i][j].remove(k);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            model.monsters = model.clone_monsters_list(cpy_board);
+        }
+        for (int i=0; i<model.monsters.length; i++) {
+            for (int j = 0; j < model.monsters[0].length; j++) {
+                if (!model.monsters[i][j].isEmpty())
+                    draw_monster(i, j);
+            }
+        }
         view.invalidate();
-        throw new RuntimeException("Not implemented");
-
+        return null;
     }
 }
