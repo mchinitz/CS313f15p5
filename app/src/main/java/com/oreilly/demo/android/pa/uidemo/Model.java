@@ -12,6 +12,7 @@ public class Model {
     private Boolean is_user_initiated;
     public Model(int m, int n)
     {
+
         monsters = new List [m][n];
         for (int i=0; i<m; i++)
             for (int j=0; j<n; j++)

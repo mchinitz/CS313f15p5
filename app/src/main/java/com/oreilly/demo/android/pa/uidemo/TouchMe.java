@@ -6,9 +6,12 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +20,7 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnKeyListener;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -147,7 +151,6 @@ public class TouchMe extends Activity {
     /** Called when the activity is first created. */
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-
         // install the view
         setContentView(R.layout.main);
 
@@ -213,14 +216,16 @@ public class TouchMe extends Activity {
         final EditText tb1 = (EditText) findViewById(R.id.text1);
         final EditText tb2 = (EditText) findViewById(R.id.text2);
         dotModel.setDotsChangeListener(new Dots.DotsChangeListener() {
-            @Override public void onDotsChange(Dots dots) {
+            @Override
+            public void onDotsChange(Dots dots) {
                 Dot d = dots.getLastDot();
                 // This code makes the UI unacceptably unresponsive.
                 // ... investigating - in March, 2014, this was not a problem
                 tb1.setText((null == d) ? "" : String.valueOf(d.getX())); // uncommented
                 tb2.setText((null == d) ? "" : String.valueOf(d.getY())); // uncommented
                 dotView.invalidate();
-            } });
+            }
+        });
     } //end of OnCreate
 
     /** Install an options menu. */
@@ -276,4 +281,37 @@ public class TouchMe extends Activity {
             color,
             DOT_DIAMETER);
     }
+
+
+    public static class Constants {
+
+        private static int width, height;
+
+        //TODO cite http://stackoverflow.com/questions/1016896/get-screen-dimensions-in-pixels
+
+        public Constants(Activity activity) {
+
+            WindowManager windowManager = activity.getWindowManager();
+            Display display = windowManager.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            width = size.x;
+            height = size.y;
+
+        }
+
+        public static int get_width()
+        {
+            return width;
+        }
+
+        public static int get_height()
+        {
+            return height;
+        }
+
+        //and necessarily no setter methods
+
+    }
+
 }
