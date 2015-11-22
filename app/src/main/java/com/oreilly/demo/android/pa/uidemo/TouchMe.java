@@ -46,10 +46,11 @@ public class TouchMe extends Activity {
             int idx;
             int action = evt.getAction();
             switch (action & MotionEvent.ACTION_MASK) {
-                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_DOWN: //aka press the mouse on left
                 case MotionEvent.ACTION_POINTER_DOWN:
                     idx = (action & MotionEvent.ACTION_POINTER_INDEX_MASK)
                         >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
+                    //left and right bit shifts really are supported in Java
                     tracks.add(Integer.valueOf(evt.getPointerId(idx)));
                     break;
 
@@ -127,7 +128,7 @@ public class TouchMe extends Activity {
             while (!done) {
                 hdlr.post(makeDots);
                 try { Thread.sleep(2000); }
-                catch (InterruptedException e) { }
+                catch (InterruptedException e) {}
             }
         }
     }
@@ -157,9 +158,11 @@ public class TouchMe extends Activity {
         dotView.setOnCreateContextMenuListener(this);
         dotView.setOnTouchListener(new TrackingTouchListener(dotModel));
 
+        //if an appropriate key is pressed, creates a dot
         dotView.setOnKeyListener(new OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
                 if (KeyEvent.ACTION_DOWN != event.getAction()) {
                     return false;
                 }
@@ -218,7 +221,7 @@ public class TouchMe extends Activity {
                 tb2.setText((null == d) ? "" : String.valueOf(d.getY())); // uncommented
                 dotView.invalidate();
             } });
-    }
+    } //end of OnCreate
 
     /** Install an options menu. */
     @Override public boolean onCreateOptionsMenu(Menu menu) {
