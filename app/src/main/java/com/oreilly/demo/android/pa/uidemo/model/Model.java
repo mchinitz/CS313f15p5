@@ -1,4 +1,4 @@
-package com.oreilly.demo.android.pa.uidemo;
+package com.oreilly.demo.android.pa.uidemo.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 /**
  * Created by Lisa on 11/21/2015.
  */
+
+//TODO
 public class Model {
 
     public List<Monster> monsters[][];
