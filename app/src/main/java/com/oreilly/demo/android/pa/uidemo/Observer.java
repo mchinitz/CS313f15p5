@@ -7,7 +7,7 @@ package com.oreilly.demo.android.pa.uidemo;
 /**
  General observer interface for the Observer Pattern, with the single method update().
  */
-public interface observer
+public interface Observer
 {
     public Object update();
 }
