@@ -3,6 +3,8 @@ package com.oreilly.demo.android.pa.uidemo;
 import android.graphics.Color;
 import android.view.View;
 
+import com.oreilly.demo.android.pa.uidemo.view.monster_observer;
+
 import java.util.List;
 import java.util.Random;
 
@@ -12,7 +14,7 @@ import java.util.Random;
  */
 
 //whenever there is a change to the monsters
-public abstract class UpdateMonstersListener implements observer {
+public abstract class UpdateMonstersListener implements monster_observer {
 
     private Model model;
     private View view;
@@ -24,12 +26,7 @@ public abstract class UpdateMonstersListener implements observer {
         random = new Random();
     }
 
-    public void draw_monster(int x, int y)
-    {
-    }
-
     //returns the coordinates of the location at which the mouse is pressed by the user
-    public abstract int [] get_coordinates();
 
     @Override
     public Object update() {
@@ -79,3 +76,5 @@ public abstract class UpdateMonstersListener implements observer {
         return null;
     }
 }
+
+//so we should be ready to try to implement the change wrt getting data in monster class.

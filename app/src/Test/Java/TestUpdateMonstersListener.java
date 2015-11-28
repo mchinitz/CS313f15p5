@@ -32,6 +32,11 @@ public class TestUpdateMonstersListener  {
         view = mock(View.class);
         observer = new UpdateMonstersListener(model, view) {
             @Override
+            public void draw_monster(int x, int y) {
+
+            }
+
+            @Override
             public int[] get_coordinates() {
                 int sample_coordinates[] = new int[2];
                 sample_coordinates[0] = 0;

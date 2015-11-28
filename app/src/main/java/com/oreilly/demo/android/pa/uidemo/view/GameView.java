@@ -1,27 +1,35 @@
 package com.oreilly.demo.android.pa.uidemo.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 
+import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
 import com.oreilly.demo.android.pa.uidemo.Model;
-import com.oreilly.demo.android.pa.uidemo.MonstersGameController;
+import com.oreilly.demo.android.pa.uidemo.MonsterGame;
+import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
+import com.oreilly.demo.android.pa.uidemo.observer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Lisa on 11/22/2015.
  */
 public class GameView extends View {
+    private int m = 5, n = 5; //for now
     private Model model;
 
     private Boolean is_constants_constructor_called = false;
     int width, height;
+    private MonsterGame monsterGame;
+    private List<observer> observerList;
+    private Canvas canvas;
 
     public GameView(Context context) {
         super(context);
@@ -36,10 +44,43 @@ public class GameView extends View {
         this(context);
     }
 
+
+
     public void Constructor()
     {
         width = getWidth();
         height = getHeight();
+        observerList = new ArrayList<>();
+        model = new Model(m,n);
+        monsterGame = new MonsterGame(observerList, this);
+
+        observerList.add(new UpdateMonstersListener(model, this) {
+            @Override
+            public void draw_monster(int x, int y) {
+
+            }
+
+            @Override
+            public int[] get_coordinates() {
+                return new int[2];
+            }
+        });
+        observerList.add(new GameDurationObserver(monsterGame.getClockModel()));
+
+    }
+
+    public Canvas getCanvas()
+    {
+        return canvas;
+    }
+
+
+    //The entire point of this function is so we can call onDraw() publically
+    @SuppressLint("WrongCall")
+    public void OnDraw(Canvas canvas)
+    {
+        onDraw(canvas);
+
     }
 
     @Override
@@ -47,11 +88,9 @@ public class GameView extends View {
         if (!is_constants_constructor_called)
         {
             Constructor();
-            is_constants_constructor_called = true;
         }
-        //for now
-       int m = 5, n = 5;
-       model = new Model(m,n);
+        this.canvas = canvas;
+
        Paint paint = new Paint();
        paint.setColor(Color.RED);
        paint.setStyle(Paint.Style.STROKE);
@@ -80,6 +119,11 @@ public class GameView extends View {
            canvas.drawLine(width * 0.1f / m,y,(float)(width * (m - 0.1) / m),y,paint);
        }
 
+        if (!is_constants_constructor_called)
+        {
+            is_constants_constructor_called = true; //don't start a new game during subsequent draws
+            monsterGame.play_game();
+        }
 
 
     }
