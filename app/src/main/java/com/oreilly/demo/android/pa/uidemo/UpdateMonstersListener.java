@@ -3,17 +3,20 @@ package com.oreilly.demo.android.pa.uidemo;
 import android.graphics.Color;
 import android.view.View;
 
+import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 import com.oreilly.demo.android.pa.uidemo.view.monster_observer;
+import com.oreilly.demo.android.pa.uidemo.model.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 
 /**
- * Created by Lisa on 11/21/2015.
+ * Created by Michael on 11/21/2015.
  */
 
-//whenever there is a change to the monsters
+//whenever there is a change to the monsterWithCoordinates
 public abstract class UpdateMonstersListener implements monster_observer {
 
     private Model model;
@@ -26,55 +29,49 @@ public abstract class UpdateMonstersListener implements monster_observer {
         random = new Random();
     }
 
-    //returns the coordinates of the location at which the mouse is pressed by the user
 
     @Override
     public Object update() {
         if (model.get_status())
-            model.monsters[get_coordinates()[0]][get_coordinates()[1]].clear();
+        {
+            int [] coordinates = get_coordinates();
+            model.monsterWithCoordinates.removeAll(model.Find_Monsters_on_Square(coordinates[0], coordinates[1]));
+        }
         else {
-            List<Monster> cpy_board [][] = model.clone_monsters_list(model.monsters);
-            int m = model.monsters.length;
-            int n = model.monsters[0].length;
+
+            List<MonsterWithCoordinates> cpy_board = new ArrayList<>();
+            int m = model.getM();
+            int n = model.getN();
             if (m <= 1 && n <= 1)
                 throw new AssertionError();
             //do random movements here
-            for (int i = 0; i < m; i++) {
-                for (int j = 0; j < n; j++) {
-                    int len = model.monsters[i][j].size();
-                    for (int k = len - 1; k >= 0; k --) {
+
+            for (MonsterWithCoordinates monsterWithCoordinates : model.monsterWithCoordinates)
+            {
+                    int i = monsterWithCoordinates.getX();
+                    int j = monsterWithCoordinates.getY();
                         while (true) {
                             int deltaX = random.nextInt(3) - 1;
                             int deltaY = random.nextInt(3) - 1;
                             if ((deltaX != 0 || deltaY != 0) && (i + deltaX >= 0) && (i + deltaX < m) && (j + deltaY >= 0) && (j + deltaY < n)) // if in bounds
                             {
-                                int new_data[] = new int[3];
-                                new_data[0] = i + deltaX;
-                                new_data[1] = j + deltaY;
-                                if (random.nextInt(2) == 1)
-                                    new_data[2] = Color.GREEN;
-                                else
-                                    new_data[2] = Color.YELLOW;
-                                cpy_board[i][j].get(k).set_data(new_data);
-                                cpy_board[new_data[0]][new_data[1]].add(cpy_board[i][j].get(k));
-                                cpy_board[i][j].remove(k);
+                                MonsterWithCoordinates copy_monsterWithCoordinates = new MonsterWithCoordinates(i + deltaX, j + deltaY,
+                                ((random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW));
+                                cpy_board.add(copy_monsterWithCoordinates);
                                 break;
                             }
                         }
                     }
-                }
-            }
-            model.monsters = model.clone_monsters_list(cpy_board);
+            model.monsterWithCoordinates = cpy_board;
+
         }
-        for (int i=0; i<model.monsters.length; i++) {
-            for (int j = 0; j < model.monsters[0].length; j++) {
-                if (!model.monsters[i][j].isEmpty())
-                    draw_monster(i, j);
-            }
+
+        for (MonsterWithCoordinates monsterWithCoordinates : model.monsterWithCoordinates) {
+                    draw_monster(monsterWithCoordinates.getX(), monsterWithCoordinates.getY());
         }
         view.invalidate();
+
         return null;
     }
 }
 
-//so we should be ready to try to implement the change wrt getting data in monster class.

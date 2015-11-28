@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 
 /**
- * Created by Lisa on 11/22/2015.
+ * Created by Michael on 11/22/2015.
  */
 public class MonstersGameController extends Activity {
 

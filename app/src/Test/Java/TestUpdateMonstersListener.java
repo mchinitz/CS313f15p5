@@ -1,9 +1,9 @@
 import android.graphics.Color;
 import android.view.View;
 
-import com.oreilly.demo.android.pa.uidemo.Model;
-import com.oreilly.demo.android.pa.uidemo.Monster;
 import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.model.Model;
+import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
@@ -15,13 +15,11 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 /**
- * Created by Lisa on 11/22/2015.
+ * Created by Michael on 11/22/2015.
  */
 
 
 public class TestUpdateMonstersListener  {
-
-
 
     Model model;
     View view;
@@ -49,29 +47,29 @@ public class TestUpdateMonstersListener  {
     @Test
     public void TestUpdate()
     {
-
-        model.monsters[0][0].add(new Monster(0, 0, Color.GREEN));
-        model.monsters[0][0].add(new Monster(0, 0, Color.YELLOW));
-        List<Monster>[][] original_board = model.clone_monsters_list(model.monsters);
+        model.monsterWithCoordinates.clear();
+        model.monsterWithCoordinates.add(new MonsterWithCoordinates(0, 0, Color.GREEN));
+        model.monsterWithCoordinates.add(new MonsterWithCoordinates(0, 0, Color.YELLOW));
+        List<MonsterWithCoordinates> original_board = model.clone_monsters_list(model.monsterWithCoordinates);
 
         int num_times_in_squares[][] = new int[3][3];
         int num_times_green = 0;
+
 
         //Use monte carlo to test randomness
         for (int i=0; i<100000; i++)
         {
             observer.update();
-            for (int j=0; j<3; j++)
-                for (int k=0; k<3; k++)
-                {
-                    num_times_in_squares[j][k] += model.monsters[j][k].size();
-                    for (int l=0; l<model.monsters[j][k].size(); l++)
-                        if (model.monsters[j][k].get(l).get_data()[2] == Color.GREEN)
-                            num_times_green ++;
-                }
-            model.monsters = model.clone_monsters_list(original_board);
-            assertEquals(2, model.monsters[0][0].size());
+            for (MonsterWithCoordinates monsterWithCoordinates : model.monsterWithCoordinates)
+            {
+                num_times_in_squares[monsterWithCoordinates.getX()][monsterWithCoordinates.getY()]++;
+                if (monsterWithCoordinates.getColor() == Color.GREEN)
+                    num_times_green ++;
+            }
+            model.monsterWithCoordinates = model.clone_monsters_list(original_board);
+            assertEquals(2, model.Find_Monsters_on_Square(0,0).size());
         }
+
         //now test randomness up to 10% deviation from uniformly distributed
         assertTrue(num_times_green >= 90000 && num_times_green <= 110000);
         for (int i=0; i<3; i++)
@@ -86,7 +84,6 @@ public class TestUpdateMonstersListener  {
                     //assert that the adjacent squares receive at least 90% * 1/3
                     assert(num_times_in_squares[i][j] <= 73334);
                 }
-
     }
 
 

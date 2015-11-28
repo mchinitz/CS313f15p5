@@ -9,17 +9,17 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
-import com.oreilly.demo.android.pa.uidemo.Model;
 import com.oreilly.demo.android.pa.uidemo.MonsterGame;
 import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
-import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
-import com.oreilly.demo.android.pa.uidemo.observer;
 
 import java.util.ArrayList;
 import java.util.List;
+//=======
+import com.oreilly.demo.android.pa.uidemo.model.Model;
+import com.oreilly.demo.android.pa.uidemo.observer;
 
 /**
- * Created by Lisa on 11/22/2015.
+ * Created by Michael on 11/22/2015.
  */
 public class GameView extends View {
     private int m = 5, n = 5; //for now
