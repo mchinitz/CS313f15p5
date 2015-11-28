@@ -28,6 +28,7 @@ public abstract class DefaultClockModel extends MonstersGameController implement
 
     @Override
     public void start() {
+
         timer = new Timer();
 
         timer.schedule(new TimerTask() {
@@ -35,13 +36,18 @@ public abstract class DefaultClockModel extends MonstersGameController implement
                 synchronized (this) {
 
                     runOnUiThread(() -> {
-                        is_expired = true;
+                        time_to_wait -= 1000;
+                        if (time_to_wait == 0)
+                        {
+                            is_expired = true;
+                            timer.cancel();
+                        }
                         // fire event
                         NotifyAll();
                     });
                 }
             }
-        }, /*initial delay*/ time_to_wait, /*periodic delay*/ time_to_wait);
+        }, /*initial delay before first scheduled event*/ 0, /*periodic delay*/ 1000);
 
     }
 

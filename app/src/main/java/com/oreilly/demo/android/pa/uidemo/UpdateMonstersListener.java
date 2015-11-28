@@ -3,6 +3,7 @@ package com.oreilly.demo.android.pa.uidemo;
 import android.graphics.Color;
 import android.view.View;
 
+import com.oreilly.demo.android.pa.uidemo.model.Monster;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 import com.oreilly.demo.android.pa.uidemo.view.monster_observer;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
@@ -20,18 +21,17 @@ import java.util.Random;
 public abstract class UpdateMonstersListener implements monster_observer {
 
     private Model model;
-    private View view;
     private Random random;
-    public UpdateMonstersListener(Model model, View view)
+    public UpdateMonstersListener(Model model)
     {
         this.model = model;
-        this.view = view;
         random = new Random();
     }
 
 
     @Override
     public Object update() {
+
         if (model.get_status())
         {
             int [] coordinates = get_coordinates();
@@ -66,10 +66,6 @@ public abstract class UpdateMonstersListener implements monster_observer {
 
         }
 
-        for (MonsterWithCoordinates monsterWithCoordinates : model.monsterWithCoordinates) {
-                    draw_monster(monsterWithCoordinates.getX(), monsterWithCoordinates.getY());
-        }
-        view.invalidate();
 
         return null;
     }

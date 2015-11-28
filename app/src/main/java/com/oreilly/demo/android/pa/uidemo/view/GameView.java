@@ -6,6 +6,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 
 import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
@@ -29,7 +31,9 @@ public class GameView extends View {
     int width, height;
     private MonsterGame monsterGame;
     private List<observer> observerList;
-    private Canvas canvas;
+    private Paint paint;
+    private Pair<Float,Float> [][] list_of_corners;
+    private MonsterView monsterView;
 
     public GameView(Context context) {
         super(context);
@@ -52,36 +56,73 @@ public class GameView extends View {
         height = getHeight();
         observerList = new ArrayList<>();
         model = new Model(m,n);
-        monsterGame = new MonsterGame(observerList, this);
+        monsterGame = new MonsterGame(this);
+        paint = new Paint();
+        list_of_corners = init_corners();
 
-        observerList.add(new UpdateMonstersListener(model, this) {
-            @Override
-            public void draw_monster(int x, int y) {
+        monsterGame.getClockModel().Register_Observer(new UpdateMonstersListener(model) {
 
-            }
-
+//TODO correct this
             @Override
             public int[] get_coordinates() {
                 return new int[2];
             }
         });
-        observerList.add(new GameDurationObserver(monsterGame.getClockModel()));
+        monsterGame.getClockModel().Register_Observer(new MonsterView(getContext()) {
 
+            @Override
+            public Boolean is_expired()
+            {
+                return monsterGame.getClockModel().get_is_expired();
+            }
+
+            @Override
+            public Pair<Float,Float> get_corner(int i, int j)
+            {
+                return list_of_corners[i][j];
+            }
+
+        });
+        monsterGame.getClockModel().Register_Observer(new GameDurationObserver(monsterGame.getClockModel()));
+        observerList = monsterGame.get_Observers();
+        monsterView = (MonsterView)(observerList.get(1));
+        monsterView.setGameView(this); //to force the correct onDraw method to be called
     }
 
-    public Canvas getCanvas()
+
+    public Pair<Float,Float> [][] init_corners()
     {
-        return canvas;
+        Pair<Float,Float> [][] result = new Pair [m+1][n+1];
+        for (int i=0; i <= m; i++) {
+            float x;
+            if (i == 0)
+                x = width * 0.1f/m;
+            else if (i < m)
+                x = width * 1f * i / m;
+            else
+                x = (float)(width * (m - 0.1) / m);
+
+            for (int j = 0; j <= n; j++) {
+                float y;
+                if (j == 0)
+                    y = height * 0.1f/ n;
+                else if (j < n)
+                    y = height * 1f * j / n;
+                else
+                    y = (float)(height * (n - 0.1) / n);
+                result[i][j] = new Pair (x,y);
+            }
+        }
+        return result;
     }
 
 
-    //The entire point of this function is so we can call onDraw() publically
-    @SuppressLint("WrongCall")
-    public void OnDraw(Canvas canvas)
+    public float calculate_scale_factor()
     {
-        onDraw(canvas);
-
+        return Math.min(0.9f * width / m, 0.9f * height / n);
     }
+
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -89,35 +130,21 @@ public class GameView extends View {
         {
             Constructor();
         }
-        this.canvas = canvas;
-
-       Paint paint = new Paint();
        paint.setColor(Color.RED);
-       paint.setStyle(Paint.Style.STROKE);
+       paint.setStyle(Paint.Style.FILL_AND_STROKE);
        //When drawing the board, make sure to stay away from the edges, so that the user can
         //see the border
        for (int i=0; i<=m; i++)
        {
-           float x;
-           if (i == 0)
-               x = width * 0.1f/m;
-           else if (i < m)
-               x = width * 1f * i / m;
-           else
-               x = (float)(width * (m - 0.1) / m);
+           float x = list_of_corners[i][0].first;
            canvas.drawLine(x,height * 0.1f / n,x,(float)(height * (n - 0.1) / n),paint);
        }
        for (int j=0; j<=n; j++)
        {
-           float y;
-           if (j == 0)
-               y = height * 0.1f/ n;
-           else if (j < n)
-               y = height * 1f * j / n;
-           else
-                y = (float)(height * (n - 0.1) / n);
+           float y = list_of_corners[0][j].second;
            canvas.drawLine(width * 0.1f / m,y,(float)(width * (m - 0.1) / m),y,paint);
        }
+        monsterView.draw(canvas,paint,calculate_scale_factor(),model.monsterWithCoordinates);
 
         if (!is_constants_constructor_called)
         {
@@ -127,5 +154,4 @@ public class GameView extends View {
 
 
     }
-
 }

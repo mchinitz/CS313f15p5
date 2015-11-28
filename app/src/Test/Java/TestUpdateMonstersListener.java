@@ -22,17 +22,11 @@ import static org.mockito.Mockito.*;
 public class TestUpdateMonstersListener  {
 
     Model model;
-    View view;
     UpdateMonstersListener observer;
     public TestUpdateMonstersListener()
     {
         model = new Model(3,3);
-        view = mock(View.class);
-        observer = new UpdateMonstersListener(model, view) {
-            @Override
-            public void draw_monster(int x, int y) {
-
-            }
+        observer = new UpdateMonstersListener(model) {
 
             @Override
             public int[] get_coordinates() {
