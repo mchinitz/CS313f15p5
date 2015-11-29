@@ -10,18 +10,22 @@ import java.util.List;
 
 
 /**
- * Created by Lisa on 11/27/2015.
+ * Created by Michael on 11/27/2015.
  */
+
+//This class contains the rules of the game, except for the movement of the monsters.
+    //It keeps track of time. Every second, it notifies the observers that a second has elapsed
+    //(so monsters should be moved). Also, it responds to the user clicking on a square
+    //(not yet implemented).
 public class MonsterGame {
 
-    private int gameplay_time = 5; //for now, and in seconds
+    private int gameplay_time = 1; //for now, and in seconds
     private ClockModel clockModel;
     private List<observer> Observers;
-    private GameView gameView;
+    private int curr_score = 0;
     public MonsterGame(GameView gameView)
     {
        Observers = new ArrayList<> ();
-       this.gameView = gameView;
         //use gameplay_time + 1 since actually an event occurs immediately
        clockModel = new DefaultClockModel((gameplay_time +1) * 1000) {
 
@@ -35,10 +39,13 @@ public class MonsterGame {
             public void NotifyAll() {
                 for (observer o : Observers)
                     o.update();
-                if (clockModel.get_is_expired())
-                    throw new RuntimeException("not implemented");
             }
         };
+    }
+
+    public int getCurr_score()
+    {
+        return curr_score;
     }
 
     public ClockModel getClockModel()
@@ -62,7 +69,6 @@ public class MonsterGame {
                 Observers.get(1) instanceof MonsterView &&
                 Observers.get(2) instanceof GameDurationObserver)))
             throw new RuntimeException();
-
 
         clockModel.start();
     }

@@ -3,8 +3,10 @@ package com.oreilly.demo.android.pa.uidemo;
 import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
 
 /**
- * Created by Lisa on 11/27/2015.
+ * Created by Michael on 11/27/2015.
  */
+
+//Responds to the time expiring by stopping the timer
 public class GameDurationObserver implements observer {
 
     private ClockModel clockModel;

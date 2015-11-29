@@ -10,7 +10,7 @@ import java.util.Random;
  * Created by Michael on 11/21/2015.
  */
 
-//TODO
+//This class defines the board and populates monsters on the board
 public class Model {
 
     public List<MonsterWithCoordinates> monsterWithCoordinates;
@@ -21,6 +21,8 @@ public class Model {
         this.m = m;
         this.n = n;
         monsterWithCoordinates = new ArrayList ();
+        //populates the board initially with one monster per square.
+        //TODO the initial state is wrong
         for (int i=0; i<m; i++)
             for (int j=0; j<n; j++)
             {
@@ -39,11 +41,16 @@ public class Model {
         return n;
     }
 
+    //Returns the context for the change in the numbers and locations of monsters.
+    //If the user presses the mouse, then the interaction is to eliminate all monsters on the
+    //square
+    //TODO but what about if a square has green or yellow
     public Boolean get_status()
     {
         return is_user_initiated;
     }
 
+   //returns a list of all monsters on a particular square. Used to move the monsters
   public List<MonsterWithCoordinates> Find_Monsters_on_Square(int x, int y)
   {
       List<MonsterWithCoordinates> result = new ArrayList<> ();
@@ -54,6 +61,7 @@ public class Model {
       return result;
   }
 
+    //Returns a copy of the list of monsters.
   public List<MonsterWithCoordinates> clone_monsters_list(List<MonsterWithCoordinates> monsterWithCoordinates)
   {
       List<MonsterWithCoordinates> copy = new ArrayList<> ();

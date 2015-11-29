@@ -9,20 +9,27 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.TextView;
 
 import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
 import com.oreilly.demo.android.pa.uidemo.MonsterGame;
+import com.oreilly.demo.android.pa.uidemo.R;
 import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
 
 import java.util.ArrayList;
 import java.util.List;
 //=======
 import com.oreilly.demo.android.pa.uidemo.model.Model;
+import com.oreilly.demo.android.pa.uidemo.model.clock.DefaultClockModel;
 import com.oreilly.demo.android.pa.uidemo.observer;
 
 /**
  * Created by Michael on 11/22/2015.
  */
+
+//This class draws the board and displays the score. The drawing of the monsters is reserved
+    //for the MonsterView
+    //TODO is this the real controller? (i.e. should we rename?)
 public class GameView extends View {
     private int m = 5, n = 5; //for now
     private Model model;
@@ -49,7 +56,8 @@ public class GameView extends View {
     }
 
 
-
+    //since the constructors for a View are intended for use by Android, we need a separate
+    //constructor to be called the first time onDraw gets called.
     public void Constructor()
     {
         width = getWidth();
@@ -62,7 +70,7 @@ public class GameView extends View {
 
         monsterGame.getClockModel().Register_Observer(new UpdateMonstersListener(model) {
 
-//TODO correct this
+//TODO correct this. Supposed to return the left endpoints of the square in which the user pressed
             @Override
             public int[] get_coordinates() {
                 return new int[2];
@@ -89,7 +97,7 @@ public class GameView extends View {
         monsterView.setGameView(this); //to force the correct onDraw method to be called
     }
 
-
+    //returns a list of all of the endpoints of the squares in the board.
     public Pair<Float,Float> [][] init_corners()
     {
         Pair<Float,Float> [][] result = new Pair [m+1][n+1];
@@ -116,20 +124,28 @@ public class GameView extends View {
         return result;
     }
 
-
+    //returns the length of the bounding box around any of the monsters.
+    //TODO do we really want the monster to not fill up the box (i.e. using 0.9f)
     public float calculate_scale_factor()
     {
         return Math.min(0.9f * width / m, 0.9f * height / n);
     }
 
-
+    //Displays the score
+    public void set_textview(int value)
+    {
+        TextView view = (TextView)((DefaultClockModel)(monsterGame.getClockModel())).getScore_view();
+        view.setText("Current Score: " + new Integer(value).toString());
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         if (!is_constants_constructor_called)
         {
             Constructor();
-        }
+       }
+       set_textview(monsterGame.getCurr_score());
+
        paint.setColor(Color.RED);
        paint.setStyle(Paint.Style.FILL_AND_STROKE);
        //When drawing the board, make sure to stay away from the edges, so that the user can

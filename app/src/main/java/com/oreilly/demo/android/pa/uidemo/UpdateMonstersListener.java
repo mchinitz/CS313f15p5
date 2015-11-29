@@ -1,9 +1,7 @@
 package com.oreilly.demo.android.pa.uidemo;
 
 import android.graphics.Color;
-import android.view.View;
 
-import com.oreilly.demo.android.pa.uidemo.model.Monster;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 import com.oreilly.demo.android.pa.uidemo.view.monster_observer;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
@@ -17,7 +15,7 @@ import java.util.Random;
  * Created by Michael on 11/21/2015.
  */
 
-//whenever there is a change to the monsterWithCoordinates
+//Responds to events by removing or shifting monsters on the board.
 public abstract class UpdateMonstersListener implements monster_observer {
 
     private Model model;
@@ -28,7 +26,8 @@ public abstract class UpdateMonstersListener implements monster_observer {
         random = new Random();
     }
 
-
+    //For each monster, randomly select an adjacent square on the board (never the same square).
+    //Also, randomly select a new color.
     @Override
     public Object update() {
 
@@ -40,6 +39,8 @@ public abstract class UpdateMonstersListener implements monster_observer {
         else {
 
             List<MonsterWithCoordinates> cpy_board = new ArrayList<>();
+            //The reason for copying the board is so that all changes to the board are independent from each other.
+
             int m = model.getM();
             int n = model.getN();
             if (m <= 1 && n <= 1)
@@ -50,6 +51,7 @@ public abstract class UpdateMonstersListener implements monster_observer {
             {
                     int i = monsterWithCoordinates.getX();
                     int j = monsterWithCoordinates.getY();
+                        //Choose coordinates randomly until get a valid coordinate to move to
                         while (true) {
                             int deltaX = random.nextInt(3) - 1;
                             int deltaY = random.nextInt(3) - 1;
