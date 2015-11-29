@@ -1,5 +1,4 @@
 import android.graphics.Color;
-import android.view.View;
 
 import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
@@ -12,7 +11,7 @@ import static junit.framework.Assert.assertEquals;
 import java.util.List;
 
 //The point of mockito here is because we want a mock view
-import static org.mockito.Mockito.*;
+
 
 /**
  * Created by Michael on 11/22/2015.

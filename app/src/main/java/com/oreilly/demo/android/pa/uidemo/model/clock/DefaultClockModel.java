@@ -48,6 +48,8 @@ public abstract class DefaultClockModel extends MonstersGameController implement
                         }
                         // fire event
                         NotifyAll();
+                        if (get_is_expired())
+                            return;
                     });
                 }
             }

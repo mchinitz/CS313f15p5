@@ -7,5 +7,5 @@ import com.oreilly.demo.android.pa.uidemo.observer;
  */
 public interface monster_observer extends observer {
 
-    public int [] get_coordinates();
+    public int[] get_coordinates();
 }

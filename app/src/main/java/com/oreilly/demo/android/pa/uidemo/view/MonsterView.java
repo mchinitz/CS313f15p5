@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import java.util.List;
@@ -46,7 +45,7 @@ public abstract class MonsterView extends View implements observer {
     }
 
     //Gets the coordinates of the i,j 'th corner within the canvas.
-    public abstract Pair<Float,Float> get_corner(int i, int j);
+    public abstract List<Float> get_corner(int i, int j);
 
     //Draws a single monster to the canvas
     public final void draw_monster(Canvas canvas, Paint paint, MonsterWithCoordinates monster, float scale_factor) {
@@ -54,8 +53,8 @@ public abstract class MonsterView extends View implements observer {
 
         //temporarily
         paint.setColor(monster.getColor());
-        Pair<Float,Float> corner = get_corner(monster.getX(),monster.getY());
-        canvas.drawCircle(corner.first + scale_factor / 2, corner.second + scale_factor / 2, scale_factor / 2, paint);
+        List<Float> corner = get_corner(monster.getX(),monster.getY());
+        canvas.drawCircle(corner.get(0) + scale_factor / 2, corner.get(1) + scale_factor / 2, scale_factor / 2, paint);
     }
 
 

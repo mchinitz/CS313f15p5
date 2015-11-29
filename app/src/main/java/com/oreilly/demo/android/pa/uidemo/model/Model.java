@@ -50,6 +50,11 @@ public class Model {
         return is_user_initiated;
     }
 
+    public void set_status(Boolean status)
+    {
+        is_user_initiated = status;
+    }
+
    //returns a list of all monsters on a particular square. Used to move the monsters
   public List<MonsterWithCoordinates> Find_Monsters_on_Square(int x, int y)
   {

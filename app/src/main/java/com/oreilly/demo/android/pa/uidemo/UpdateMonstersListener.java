@@ -34,7 +34,12 @@ public abstract class UpdateMonstersListener implements monster_observer {
         if (model.get_status())
         {
             int [] coordinates = get_coordinates();
-            model.monsterWithCoordinates.removeAll(model.Find_Monsters_on_Square(coordinates[0], coordinates[1]));
+            List<MonsterWithCoordinates> new_monster_list = new ArrayList ();
+            for (MonsterWithCoordinates monsterWithCoordinates : model.monsterWithCoordinates)
+                if (monsterWithCoordinates.getX() != coordinates[0] || monsterWithCoordinates.getY() != coordinates[1] || monsterWithCoordinates.getColor() == Color.GREEN)
+                    new_monster_list.add(monsterWithCoordinates);
+            model.monsterWithCoordinates = new_monster_list;
+            model.set_status(false); //end of response
         }
         else {
 
