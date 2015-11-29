@@ -5,7 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Pair;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,7 +16,6 @@ import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
 
 import java.util.ArrayList;
 import java.util.List;
-//=======
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.model.clock.DefaultClockModel;
 import com.oreilly.demo.android.pa.uidemo.observer;
@@ -38,24 +38,18 @@ public class GameView extends View {
     private Paint paint;
     private List<Float> [][] list_of_corners;
     protected MonsterView monsterView;
+    private float loc_pressed [];
 
     public GameView(Context context) {
         super(context);
     }
 
+    public GameView(final Context context, final AttributeSet attrs) {
+        super(context, attrs);
+    }
 
     public GameView(final Context context, final AttributeSet attrs, final int defStyle) {
-        this(context);
-    }
-
-    public GameView(final Context context, final AttributeSet attrs) {
-        this(context);
-    }
-
-    public float [] get_location_pressed()
-    {
-        //FIXME
-        return new float [2];
+        super(context, attrs, defStyle);
     }
 
 
@@ -63,6 +57,7 @@ public class GameView extends View {
     //constructor to be called the first time onDraw gets called.
     public void Constructor()
     {
+        loc_pressed = new float [2];
         width = getWidth();
         height = getHeight();
         observerList = new ArrayList<>();
@@ -71,12 +66,12 @@ public class GameView extends View {
         paint = new Paint();
         list_of_corners = init_corners();
 
-        monsterGame.getClockModel().Register_Observer(new UpdateMonstersListener(model) {
+        monsterGame.getClockModel().Register_Observer(new UpdateMonstersListener(model, monsterGame) {
 
 //TODO correct this. Supposed to return the coordinates where mouse is pressed
             @Override
             public int[] get_coordinates() {
-                return find_indices(get_location_pressed());
+                return find_indices(loc_pressed);
             }
         });
         monsterGame.getClockModel().Register_Observer(new MonsterView(getContext()) {
@@ -98,6 +93,7 @@ public class GameView extends View {
         observerList = monsterGame.get_Observers();
         monsterView = (MonsterView)(observerList.get(1));
         monsterView.setGameView(this); //to force the correct onDraw method to be called
+
     }
 
     //Given coordinates of where mouse is pressed, returs the indices which correspond to the square
@@ -106,27 +102,26 @@ public class GameView extends View {
     {
 
         int [] results = new int [2];
-
         if (coordinates[0] < list_of_corners[0][0].get(0) || coordinates[1] < list_of_corners[0][0].get(1))
             throw new RuntimeException("Must press mouse within the board");
-        for (int i=0; i<m; i++)
+        for (int i=1; i<=m; i++)
         {
             if (list_of_corners[i][0].get(0) > coordinates[0])
             {
-                results[0] = i;
+                results[0] = i - 1;
                 break;
             }
-            else if (i == m - 1)
+            else if (i == m)
                 throw new RuntimeException("Must press mouse within the board");
         }
-        for (int j=0; j<n; j++)
+        for (int j=1; j<=n; j++)
         {
             if (list_of_corners[0][j].get(1) > coordinates[1])
             {
-                results[1] = j;
+                results[1] = j-1;
                 break;
             }
-            else if (j == n - 1)
+            else if (j == n)
                 throw new RuntimeException("Must press mouse within the board");
         }
         return results;
@@ -183,6 +178,7 @@ public class GameView extends View {
         {
             Constructor();
        }
+
        set_textview(monsterGame.getCurr_score());
 
        paint.setColor(Color.RED);
@@ -212,12 +208,23 @@ public class GameView extends View {
 
 
 
-    public void onPress()
+    public boolean onPress(MotionEvent event)
     {
+       int action = event.getAction() & event.ACTION_MASK;
+
         //at some point
+    if (action != event.ACTION_DOWN && action != event.ACTION_POINTER_DOWN)
+           return false; //not a mouse-pressing event
+
+       loc_pressed[0] = event.getX();
+       loc_pressed[1] = event.getY();
+
+       //Log.d("Mouse pressed at ", "" + width + " " + height + " " + loc_pressed[0] + " " + loc_pressed[1]);
 
        model.set_status(true);
        monsterGame.getClockModel().NotifyAll();
-
+       return true;
     }
 }
+
+//THERE IS CLEARLY SOMETHING SPECIFIC ABOUT GAMEVIEW THAT PREVENTS IT FROM GETTING ITS ID

@@ -1,11 +1,14 @@
 package com.oreilly.demo.android.pa.uidemo;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
+
+import com.oreilly.demo.android.pa.uidemo.view.DefaultOnTouchListener;
+import com.oreilly.demo.android.pa.uidemo.view.GameView;
 
 
 /**
@@ -33,7 +36,10 @@ public class MonstersGameController extends Activity {
         super.onCreate(SavedInstanceState);
         setContentView(R.layout.activitymain);
         init_score_view();
+
+        GameView view = (GameView) findViewById(R.id.canvas);
+        if (view == null)
+            throw new RuntimeException();
+        view.setOnTouchListener(new DefaultOnTouchListener());
     }
-
-
 }

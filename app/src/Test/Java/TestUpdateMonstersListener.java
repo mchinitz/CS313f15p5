@@ -1,5 +1,6 @@
 import android.graphics.Color;
 
+import com.oreilly.demo.android.pa.uidemo.MonsterGame;
 import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
@@ -7,6 +8,7 @@ import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class TestUpdateMonstersListener  {
     public TestUpdateMonstersListener()
     {
         model = new Model(3,3);
-        observer = new UpdateMonstersListener(model) {
+        observer = new UpdateMonstersListener(model,mock(MonsterGame.class)) {
 
             @Override
             public int[] get_coordinates() {

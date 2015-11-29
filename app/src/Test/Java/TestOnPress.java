@@ -1,19 +1,24 @@
 /**
- * Created by Lisa on 11/28/2015.
+ * Created by Michael on 11/28/2015.
  */
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.MotionEvent;
 
+import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
 import com.oreilly.demo.android.pa.uidemo.MonsterGame;
 import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
+import com.oreilly.demo.android.pa.uidemo.observer;
 import com.oreilly.demo.android.pa.uidemo.view.GameView;
+import com.oreilly.demo.android.pa.uidemo.view.MonsterView;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
@@ -36,6 +41,16 @@ class GameViewTest extends GameView
         curr_monster_game = monsterGame;
     }
 
+    public int getM()
+    {
+        return m;
+    }
+
+    public int getN()
+    {
+        return n;
+    }
+
     //It is neccessary to overwrite the width and height after the call to getWidth and getHeight.
     //We cannot have a legitimate test with width = height = 0.
     @Override
@@ -46,13 +61,17 @@ class GameViewTest extends GameView
         return super.init_corners();
     }
 
-    @Override
-    public float [] get_location_pressed()
+    public int [] super_find_indices(float [] coordinates)
     {
-        float [] coordinates = new float [2];
+        return super.find_indices(coordinates);
+    }
+
+    @Override
+    public int [] find_indices(float [] coordinates)
+    {
         coordinates[0] = 45;
         coordinates[1] = 135;
-        return coordinates;
+        return super.find_indices(coordinates);
     }
 
 }
@@ -87,16 +106,40 @@ public class TestOnPress {
         return indices;
     }
 
-    //NOTE: THIS IS GOING TO FAIL UNTIL AT LEAST THE UPDATEMONSTERSLISTENER is invoked
+    @Test
+    public void Test_Coordinate_Transformations()
+    {
+        initialize();
+        int m = gameViewTest.getM();
+        int n = gameViewTest.getN();
+
+        for (int i=0; i<m; i++)
+            for (int j=0; j<n; j++)
+            {
+                float test_coords [] = {100 * (i + 0.5f) / m, 200 * (j + 0.5f) / n};
+
+                int [] indices = gameViewTest.super_find_indices(test_coords);
+                assertEquals(indices[0], i);
+                assertEquals(indices[1], j);
+            }
+    }
+
     @Test
     public void Test()
     {
         int [] indices = initialize();
 
-        gameViewTest.onPress(); //press at the origin
+        //assert that the correct observers are registered
+        List<observer> Observers = gameViewTest.curr_monster_game.getObservers();
+        assertTrue(((Observers.size() == 3 && Observers.get(0) instanceof UpdateMonstersListener &&
+                Observers.get(1) instanceof MonsterView &&
+                Observers.get(2) instanceof GameDurationObserver)));
+
+        gameViewTest.onPress(mock(MotionEvent.class)); //press at the origin
         List<MonsterWithCoordinates> list_at_loc = (gameViewTest.curr_model.Find_Monsters_on_Square(indices[0],indices[1]));
         assertEquals(list_at_loc.size(),1);
         assertEquals(list_at_loc.get(0).getColor(),Color.GREEN);
+        assertEquals(gameViewTest.curr_monster_game.getCurr_score(), 1); //eliminated exactly one monster
     }
 
 
