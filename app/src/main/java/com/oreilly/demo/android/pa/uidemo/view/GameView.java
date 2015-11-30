@@ -68,7 +68,6 @@ public class GameView extends View {
 
         monsterGame.getClockModel().Register_Observer(new UpdateMonstersListener(model, monsterGame) {
 
-//TODO correct this. Supposed to return the coordinates where mouse is pressed
             @Override
             public int[] get_coordinates() {
                 return find_indices(loc_pressed);
@@ -96,34 +95,37 @@ public class GameView extends View {
 
     }
 
+
+
     //Given coordinates of where mouse is pressed, returs the indices which correspond to the square
     //surrounding the index
     public int [] find_indices(float [] coordinates)
     {
 
         int [] results = new int [2];
-        if (coordinates[0] < list_of_corners[0][0].get(0) || coordinates[1] < list_of_corners[0][0].get(1))
-            throw new RuntimeException("Must press mouse within the board");
-        for (int i=1; i<=m; i++)
-        {
-            if (list_of_corners[i][0].get(0) > coordinates[0])
-            {
-                results[0] = i - 1;
-                break;
+        if (coordinates[0] < 0 || coordinates[0] >= width || coordinates[1] < 0 || coordinates[1] >= height)
+            return null;
+        if (coordinates[0] < list_of_corners[0][0].get(0))
+            results[0] = 0;
+        else
+            for (int i = 1; i <= m; i++) {
+                if (list_of_corners[i][0].get(0) > coordinates[0] || i==m) {
+                    results[0] = i - 1;
+                    break;
+                }
             }
-            else if (i == m)
-                throw new RuntimeException("Must press mouse within the board");
-        }
-        for (int j=1; j<=n; j++)
-        {
-            if (list_of_corners[0][j].get(1) > coordinates[1])
+        if (coordinates[1] < list_of_corners[0][0].get(1))
+            results[1] = 0;
+        else
+            for (int j=1; j<=n; j++)
             {
-                results[1] = j-1;
-                break;
+                if (list_of_corners[0][j].get(1) > coordinates[1] || j==n)
+                {
+                    results[1] = j-1;
+                    break;
+                }
+
             }
-            else if (j == n)
-                throw new RuntimeException("Must press mouse within the board");
-        }
         return results;
     }
 
@@ -210,6 +212,8 @@ public class GameView extends View {
 
     public boolean onPress(MotionEvent event)
     {
+        if (monsterView.is_expired())
+            return false; //prevents user from cheating by eliminating monsters after the end of the game
        int action = event.getAction() & event.ACTION_MASK;
 
         //at some point
