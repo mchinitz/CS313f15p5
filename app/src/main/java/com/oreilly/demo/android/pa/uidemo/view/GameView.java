@@ -5,11 +5,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.oreilly.demo.android.pa.uidemo.Constants;
 import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
 import com.oreilly.demo.android.pa.uidemo.MonsterGame;
 import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
@@ -26,9 +26,8 @@ import com.oreilly.demo.android.pa.uidemo.observer;
 
 //This class draws the board and displays the score. The drawing of the monsters is reserved
     //for the MonsterView
-    //TODO is this the real controller? (i.e. should we rename?)
 public class GameView extends View {
-    protected int m = 5, n = 5; //for now
+    protected int m = Constants.m, n = Constants.n;
     protected Model model;
 
     private Boolean is_constants_constructor_called = false;
@@ -73,7 +72,7 @@ public class GameView extends View {
                 return find_indices(loc_pressed);
             }
         });
-        monsterGame.getClockModel().Register_Observer(new MonsterView(getContext()) {
+        monsterGame.getClockModel().Register_Observer(new MonsterView() {
 
             @Override
             public Boolean is_expired()
@@ -95,10 +94,9 @@ public class GameView extends View {
 
     }
 
-
-
-    //Given coordinates of where mouse is pressed, returs the indices which correspond to the square
-    //surrounding the index
+    //Given coordinates of where mouse is pressed, returns the indices which correspond to the square
+    //surrounding the index. It would be difficult to accomplish the i and j loops in a function because
+    //of the use of 2-D indexing
     public int [] find_indices(float [] coordinates)
     {
 
@@ -129,29 +127,26 @@ public class GameView extends View {
         return results;
     }
 
-    //returns a list of all of the endpoints of the squares in the board.
+
+    //these two functions together return a list of all of the endpoints of the squares in the board.
+    //the first is an auxillary function whose sole purpose is for the second
+    public float get_coord(int index, int max_index, float max_in_direction)
+    {
+        if (index == 0)
+            return max_in_direction * 0.1f / max_index;
+        else if (index < max_index)
+            return max_in_direction * 1f * index / max_index;
+        else
+            return max_in_direction * (max_index - 0.1f) / max_index;
+    }
+
     public List<Float> [][] init_corners()
     {
-
         List<Float> [][] result = new List [m+1][n+1];
         for (int i=0; i <= m; i++) {
-            Float x;
-            if (i == 0)
-                x = width * 0.1f/m;
-            else if (i < m)
-                x = width * 1f * i / m;
-            else
-                x = (float)(width * (m - 0.1) / m);
-
+            Float x = get_coord(i,m,width);
             for (int j = 0; j <= n; j++) {
-                Float y;
-                if (j == 0)
-                    y = height * 0.1f/ n;
-                else if (j < n)
-                    y = height * 1f * j / n;
-                else
-                    y = (float)(height * (n - 0.1) / n);
-
+                Float y = get_coord(j,n,height);
                 result[i][j] = new ArrayList();
                 result[i][j].add(x);
                 result[i][j].add(y);
@@ -166,6 +161,9 @@ public class GameView extends View {
     {
         return Math.min(0.9f * width / m, 0.9f * height / n);
     }
+
+
+    //--------------------------------------------------//
 
     //Displays the score
     public void set_textview(int value)
@@ -208,8 +206,6 @@ public class GameView extends View {
 
     }
 
-
-
     public boolean onPress(MotionEvent event)
     {
         if (monsterView.is_expired())
@@ -230,5 +226,3 @@ public class GameView extends View {
        return true;
     }
 }
-
-//THERE IS CLEARLY SOMETHING SPECIFIC ABOUT GAMEVIEW THAT PREVENTS IT FROM GETTING ITS ID

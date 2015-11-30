@@ -22,6 +22,7 @@ import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
+import java.util.Random;
 
 class GameViewTest extends GameView
 {
@@ -34,6 +35,20 @@ class GameViewTest extends GameView
 
     public Model curr_model;
     public MonsterGame curr_monster_game;
+
+    @Override
+    public void Constructor()
+    {
+        super.Constructor();
+        model.monsterWithCoordinates.clear();
+        Random random = new Random();
+        //For this test, there will initially be one monster per square.
+        for (int i=0; i<m; i++)
+            for (int j=0; j<n; j++) {
+                int color = (random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
+                model.monsterWithCoordinates.add(new MonsterWithCoordinates(i,j,color));
+            }
+    }
 
     public void TestConstructor()
     {
@@ -141,6 +156,4 @@ public class TestOnPress {
         assertEquals(list_at_loc.get(0).getColor(),Color.GREEN);
         assertEquals(gameViewTest.curr_monster_game.getCurr_score(), 1); //eliminated exactly one monster
     }
-
-
 }

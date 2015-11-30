@@ -1,12 +1,7 @@
 package com.oreilly.demo.android.pa.uidemo.view;
 
-
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.util.Pair;
-import android.view.View;
 import java.util.List;
 
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
@@ -18,27 +13,10 @@ import com.oreilly.demo.android.pa.uidemo.observer;
  */
 
 
-//Todo determine whether this class should extend View. It would be nice to get rid of the constructor 'preamble'.
 //Draws monsters
-public abstract class MonsterView extends View implements observer {
+public abstract class MonsterView implements observer {
 
     private GameView gameView;
-
-    public MonsterView(Context context) {
-        super(context);
-        setFocusableInTouchMode(true);
-    }
-
-    public MonsterView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        setFocusableInTouchMode(true);
-    }
-
-    public MonsterView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        setFocusableInTouchMode(true);
-    }
-
 
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
@@ -61,11 +39,6 @@ public abstract class MonsterView extends View implements observer {
     public abstract Boolean is_expired();
 
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-
-        throw new RuntimeException("Should not be called");
-    }
 
     //the MonsterView responds to all events by instructing Android to redraw the canvas.
     //The reason why update itself doesn't draw the monsters is that we must be provided with

@@ -18,7 +18,7 @@ import java.util.List;
     //(not yet implemented).
 public class MonsterGame {
 
-    private int gameplay_time = 15; //for now, and in seconds
+    private int gameplay_time = Constants.gameplay_time; //for now, and in seconds
     private ClockModel clockModel;
     private List<observer> Observers;
     private int curr_score = 0;

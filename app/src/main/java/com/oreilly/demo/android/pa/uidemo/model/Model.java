@@ -2,6 +2,8 @@ package com.oreilly.demo.android.pa.uidemo.model;
 
 import android.graphics.Color;
 
+import com.oreilly.demo.android.pa.uidemo.Constants;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -14,20 +16,21 @@ import java.util.Random;
 public class Model {
 
     public List<MonsterWithCoordinates> monsterWithCoordinates;
-    private Boolean is_user_initiated = false;
+    private static Boolean is_user_initiated = false;
     private int m,n;
     public Model(int m, int n)
     {
         this.m = m;
         this.n = n;
         monsterWithCoordinates = new ArrayList ();
-        //populates the board initially with one monster per square.
-        //TODO the initial state is wrong
-        for (int i=0; i<m; i++)
-            for (int j=0; j<n; j++)
+        //populates the board initially with k monsters, whose positions are random
+
+        Random random = new Random();
+        for (int i=0; i < Constants.k; i++)
             {
-                int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
-                monsterWithCoordinates.add(new MonsterWithCoordinates(i,j,color));
+                int color = (random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
+                monsterWithCoordinates.add(new MonsterWithCoordinates(random.nextInt(m),
+                        random.nextInt(n),color));
             }
     }
 
@@ -43,8 +46,7 @@ public class Model {
 
     //Returns the context for the change in the numbers and locations of monsters.
     //If the user presses the mouse, then the interaction is to eliminate all monsters on the
-    //square
-    //TODO but what about if a square has green or yellow
+    //square that are yellow
     public Boolean get_status()
     {
         return is_user_initiated;
