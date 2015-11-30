@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
+import com.oreilly.demo.android.pa.uidemo.controller.Board_Calculations;
 import com.oreilly.demo.android.pa.uidemo.controller.GameDurationObserver;
 import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
 import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
@@ -23,13 +24,13 @@ import static org.mockito.Mockito.mock;
 import java.util.List;
 import java.util.Random;
 
-class GameViewTest extends GameView
+class GameViewTest extends Board_Calculations
 {
 
     public GameViewTest(Context context) {
-        super(context);
-        m = 5;
-        n = 5;
+        super(new GameView(context));
+        gameView.m = 5;
+        gameView.n = 5;
     }
 
     public Model curr_model;
@@ -39,30 +40,35 @@ class GameViewTest extends GameView
     public void Constructor()
     {
         super.Constructor();
-        model.monsterWithCoordinates.clear();
+        gameView.model.monsterWithCoordinates.clear();
         Random random = new Random();
         //For this test, there will initially be one monster per square.
-        for (int i=0; i<m; i++)
-            for (int j=0; j<n; j++) {
+        for (int i=0; i<gameView.m; i++)
+            for (int j=0; j<gameView.n; j++) {
                 int color = (random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
-                model.monsterWithCoordinates.add(new MonsterWithCoordinates(i,j,color));
+                gameView.model.monsterWithCoordinates.add(new MonsterWithCoordinates(i,j,color));
             }
     }
 
     public void TestConstructor()
     {
-        curr_model = model;
-        curr_monster_game = monsterGame;
+        curr_model = gameView.model;
+        curr_monster_game = gameView.monsterGame;
     }
 
     public int getM()
     {
-        return m;
+        return gameView.m;
     }
 
     public int getN()
     {
-        return n;
+        return gameView.n;
+    }
+
+    public GameView getGameView()
+    {
+        return gameView;
     }
 
     //It is neccessary to overwrite the width and height after the call to getWidth and getHeight.
@@ -70,8 +76,8 @@ class GameViewTest extends GameView
     @Override
     public List<Float> [][] init_corners()
     {
-        width = 100;
-        height = 200;
+        gameView.width = 100;
+        gameView.height = 200;
         return super.init_corners();
     }
 
@@ -156,7 +162,7 @@ public class TestOnPress {
                 Observers.get(1) instanceof MonsterView &&
                 Observers.get(2) instanceof GameDurationObserver)));
 
-        gameViewTest.onPress(mock(MotionEvent.class)); //press at the origin
+        gameViewTest.getGameView().onPress(mock(MotionEvent.class)); //press at the origin
         List<MonsterWithCoordinates> list_at_loc = (gameViewTest.curr_model.Find_Monsters_on_Square(indices[0],indices[1]));
         assertEquals(list_at_loc.size(),1);
         assertEquals(list_at_loc.get(0).getColor(),Color.GREEN);

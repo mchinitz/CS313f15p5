@@ -13,7 +13,6 @@ public class DefaultOnTouchListener implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-       boolean result = ((GameView)(v)).onPress(event);
-       return result;
+       return ((GameView)(v)).onPress(event);
     }
 }
