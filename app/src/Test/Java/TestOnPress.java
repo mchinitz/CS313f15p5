@@ -6,9 +6,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
-import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
-import com.oreilly.demo.android.pa.uidemo.MonsterGame;
-import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.controller.GameDurationObserver;
+import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
+import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 import com.oreilly.demo.android.pa.uidemo.observer;
@@ -18,7 +18,6 @@ import com.oreilly.demo.android.pa.uidemo.view.MonsterView;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
@@ -89,6 +88,13 @@ class GameViewTest extends GameView
         return super.find_indices(coordinates);
     }
 
+    @Override
+    public boolean onPress(MotionEvent event)
+    {
+        curr_model.set_status(true); //this must be done, for the OnTouchListener won't work outside
+        //of Android
+        return super.onPress(event);
+    }
 }
 
 

@@ -1,6 +1,7 @@
-package com.oreilly.demo.android.pa.uidemo;
+package com.oreilly.demo.android.pa.uidemo.controller;
 
 import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
+import com.oreilly.demo.android.pa.uidemo.observer;
 
 /**
  * Created by Michael on 11/27/2015.

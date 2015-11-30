@@ -1,7 +1,7 @@
 import android.graphics.Color;
 
-import com.oreilly.demo.android.pa.uidemo.MonsterGame;
-import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
+import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 

@@ -1,7 +1,8 @@
-package com.oreilly.demo.android.pa.uidemo.model.clock;
+package com.oreilly.demo.android.pa.uidemo.controller;
 
 
-import com.oreilly.demo.android.pa.uidemo.MonstersGameController;
+import com.oreilly.demo.android.pa.uidemo.controller.MonstersGameController;
+import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
 
 import java.util.Timer;
 import java.util.TimerTask;

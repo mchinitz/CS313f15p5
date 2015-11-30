@@ -2,7 +2,8 @@ package com.oreilly.demo.android.pa.uidemo.model;
 
 import android.graphics.Color;
 
-import com.oreilly.demo.android.pa.uidemo.Constants;
+import com.oreilly.demo.android.pa.uidemo.model.Constants;
+import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 
 import java.util.ArrayList;
 import java.util.List;

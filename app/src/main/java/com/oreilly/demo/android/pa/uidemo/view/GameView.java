@@ -9,15 +9,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.oreilly.demo.android.pa.uidemo.Constants;
-import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
-import com.oreilly.demo.android.pa.uidemo.MonsterGame;
-import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.model.Constants;
+import com.oreilly.demo.android.pa.uidemo.controller.GameDurationObserver;
+import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
+import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
 
 import java.util.ArrayList;
 import java.util.List;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
-import com.oreilly.demo.android.pa.uidemo.model.clock.DefaultClockModel;
+import com.oreilly.demo.android.pa.uidemo.controller.DefaultClockModel;
 import com.oreilly.demo.android.pa.uidemo.observer;
 
 /**
@@ -218,10 +218,6 @@ public class GameView extends View {
 
        loc_pressed[0] = event.getX();
        loc_pressed[1] = event.getY();
-
-       //Log.d("Mouse pressed at ", "" + width + " " + height + " " + loc_pressed[0] + " " + loc_pressed[1]);
-
-       model.set_status(true);
        monsterGame.getClockModel().NotifyAll();
        return true;
     }

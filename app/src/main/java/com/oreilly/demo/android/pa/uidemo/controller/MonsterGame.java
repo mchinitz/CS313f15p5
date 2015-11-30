@@ -1,7 +1,8 @@
-package com.oreilly.demo.android.pa.uidemo;
+package com.oreilly.demo.android.pa.uidemo.controller;
 
+import com.oreilly.demo.android.pa.uidemo.model.Constants;
 import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
-import com.oreilly.demo.android.pa.uidemo.model.clock.DefaultClockModel;
+import com.oreilly.demo.android.pa.uidemo.observer;
 import com.oreilly.demo.android.pa.uidemo.view.GameView;
 
 import java.util.ArrayList;

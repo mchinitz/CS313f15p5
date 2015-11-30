@@ -1,4 +1,4 @@
-package com.oreilly.demo.android.pa.uidemo;
+package com.oreilly.demo.android.pa.uidemo.model;
 
 /**
  * Created by Michael on 11/29/2015.

@@ -1,7 +1,6 @@
-package com.oreilly.demo.android.pa.uidemo;
+package com.oreilly.demo.android.pa.uidemo.controller;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 import com.oreilly.demo.android.pa.uidemo.view.monster_observer;
