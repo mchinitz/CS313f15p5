@@ -17,7 +17,7 @@ import java.util.Random;
 public class Model {
 
     public List<MonsterWithCoordinates> monsterWithCoordinates;
-    private static Boolean is_user_initiated = false;
+    private Boolean is_user_initiated = false;
     private int m,n;
     public Model(int m, int n)
     {

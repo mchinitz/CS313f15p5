@@ -26,6 +26,14 @@ import com.oreilly.demo.android.pa.uidemo.observer;
 
 //This class draws the board and displays the score. The drawing of the monsters is reserved
     //for the MonsterView
+
+
+//THE CONSTRUCTION LOOKING FOR: NEED A REFERENCE FROM THE GAMEVIEW TO THE BOARD CALCULATIONS.
+//THE REFERENCE CANNOT BE MADE IN THE GameView constructor, but this shouldn't be a problem.
+//Need not be static
+
+
+
 public class GameView extends View {
     protected int m = Constants.m, n = Constants.n;
     protected Model model;
@@ -33,11 +41,11 @@ public class GameView extends View {
     private Boolean is_constants_constructor_called = false;
     protected int width, height;
     protected MonsterGame monsterGame;
-    private List<observer> observerList;
-    private Paint paint;
-    private List<Float> [][] list_of_corners;
+    protected List<observer> observerList;
+    protected Paint paint;
+    protected List<Float> [][] list_of_corners;
     protected MonsterView monsterView;
-    private float loc_pressed [];
+    protected float loc_pressed [];
 
     public GameView(Context context) {
         super(context);
@@ -56,6 +64,7 @@ public class GameView extends View {
     //constructor to be called the first time onDraw gets called.
     public void Constructor()
     {
+
         loc_pressed = new float [2];
         width = getWidth();
         height = getHeight();
@@ -200,6 +209,8 @@ public class GameView extends View {
         if (!is_constants_constructor_called)
         {
             is_constants_constructor_called = true; //don't start a new game during subsequent draws
+            //Note that this call does not violate MVP, since the view is not probing the controller, only
+            //calling it initially to start up operations
             monsterGame.play_game();
         }
 
@@ -215,7 +226,7 @@ public class GameView extends View {
         //at some point
     if (action != event.ACTION_DOWN && action != event.ACTION_POINTER_DOWN)
            return false; //not a mouse-pressing event
-
+       model.set_status(true); //the view changes the model, allowed in MVP (a solid arrow from view to model)
        loc_pressed[0] = event.getX();
        loc_pressed[1] = event.getY();
        monsterGame.getClockModel().NotifyAll();

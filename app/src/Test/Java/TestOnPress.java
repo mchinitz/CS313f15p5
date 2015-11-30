@@ -88,13 +88,13 @@ class GameViewTest extends GameView
         return super.find_indices(coordinates);
     }
 
-    @Override
+/*    @Override
     public boolean onPress(MotionEvent event)
     {
         curr_model.set_status(true); //this must be done, for the OnTouchListener won't work outside
         //of Android
         return super.onPress(event);
-    }
+    }*/
 }
 
 
