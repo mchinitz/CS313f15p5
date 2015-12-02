@@ -1,42 +1,36 @@
 package com.oreilly.demo.android.pa.uidemo.view;
 
-
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.util.Pair;
-import android.view.View;
-import java.util.List;
-
-import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
-import com.oreilly.demo.android.pa.uidemo.observer;
-
-
 /**
  * Created by Lucas on 11/27/2015.
  */
 
+import android.R;
 
-//Todo determine whether this class should extend View. It would be nice to get rid of the constructor 'preamble'.
+import android.content.res.Resources;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.util.AttributeSet;
+import android.util.Pair;
+import java.util.List;
+
+import com.oreilly.demo.android.pa.uidemo.model.MonsterWithImage;
+import com.oreilly.demo.android.pa.uidemo.observer;
+
+
+
+
+
+
 //Draws monsters
-public abstract class MonsterView extends View implements observer {
+public abstract class MonsterView implements observer {
 
     private GameView gameView;
 
-    public MonsterView(Context context) {
-        super(context);
-        setFocusableInTouchMode(true);
-    }
+    public MonsterView() {
 
-    public MonsterView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        setFocusableInTouchMode(true);
-    }
-
-    public MonsterView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        setFocusableInTouchMode(true);
     }
 
 
@@ -48,24 +42,19 @@ public abstract class MonsterView extends View implements observer {
     public abstract List<Float> get_corner(int i, int j);
 
     //Draws a single monster to the canvas
-    public final void draw_monster(Canvas canvas, Paint paint, MonsterWithCoordinates monster, float scale_factor) {
+    public final void draw_monster(Canvas canvas, Paint paint, MonsterWithImage monster, float scale_factor) {
         //TODO implement this function
 
-        //temporarily
+        canvas.drawBitmap(monster.getMonsterSprite(), monster.getX(), monster.getY(), paint);
+        /*temporarily
         paint.setColor(monster.getColor());
-        List<Float> corner = get_corner(monster.getX(),monster.getY());
-        canvas.drawCircle(corner.get(0) + scale_factor / 2, corner.get(1) + scale_factor / 2, scale_factor / 2, paint);
+        List<Float> corner = get_corner(monster.getX(), monster.getY());
+        canvas.drawCircle(corner.get(0) + scale_factor / 2, corner.get(1) + scale_factor / 2, scale_factor / 2, paint);*/
     }
 
 
     public abstract Boolean is_expired();
 
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-
-        throw new RuntimeException("Should not be called");
-    }
 
     //the MonsterView responds to all events by instructing Android to redraw the canvas.
     //The reason why update itself doesn't draw the monsters is that we must be provided with
@@ -78,12 +67,11 @@ public abstract class MonsterView extends View implements observer {
     }
 
     //Draws the monsters to the canvas
-    public void draw(Canvas canvas, Paint paint, float scale_factor, List<MonsterWithCoordinates> monsterWithCoordinatesList)
+    public void draw(Canvas canvas, Paint paint, float scale_factor, List<MonsterWithImage> monsterWithImageList)
     {
 
-        if(monsterWithCoordinatesList == null) { throw new NullPointerException("monsters list may not be null!"); }
-        for(MonsterWithCoordinates m : monsterWithCoordinatesList)
-        {
+        if(monsterWithImageList == null) { throw new NullPointerException("monsters list may not be null!"); }
+        for(MonsterWithImage m : monsterWithImageList) {
             draw_monster(canvas,paint,m,scale_factor);
         }
 

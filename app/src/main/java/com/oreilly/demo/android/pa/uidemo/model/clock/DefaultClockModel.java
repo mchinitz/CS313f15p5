@@ -15,7 +15,7 @@ import java.util.TimerTask;
 //Purpose of this is to use command pattern. Encapsulate the command run using the object
 
 //Entire point of extending MonstersGameController is to be able to call runOnUiThread, and
-    //to reset content view
+//to reset content view
 public abstract class DefaultClockModel extends MonstersGameController implements ClockModel {
 
     // TODO make accurate by keeping track of partial seconds when canceled etc.

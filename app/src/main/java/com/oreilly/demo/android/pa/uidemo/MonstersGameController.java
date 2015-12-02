@@ -2,6 +2,7 @@ package com.oreilly.demo.android.pa.uidemo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.R;
 import android.support.annotation.LayoutRes;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,6 +15,8 @@ import com.oreilly.demo.android.pa.uidemo.view.GameView;
 /**
  * Created by Michael on 11/22/2015.
  */
+
+//I'm not really sure this is a "controller." It acts more like a scoreView class rather than a controller class.
 public class MonstersGameController extends Activity {
 
     private static View score_view;

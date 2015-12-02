@@ -13,6 +13,8 @@ import java.util.Random;
 //This class defines the board and populates monsters on the board
 public class Model {
 
+    private final String IMAGE_FILE = "monster.png";
+    private List<MonsterWithImage> monsterWithImage;
     public List<MonsterWithCoordinates> monsterWithCoordinates;
     private Boolean is_user_initiated = false;
     private int m,n;
@@ -21,6 +23,7 @@ public class Model {
         this.m = m;
         this.n = n;
         monsterWithCoordinates = new ArrayList ();
+
         //populates the board initially with one monster per square.
         //TODO the initial state is wrong
         for (int i=0; i<m; i++)
@@ -28,6 +31,7 @@ public class Model {
             {
                 int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
                 monsterWithCoordinates.add(new MonsterWithCoordinates(i,j,color));
+                monsterWithImage.add(new MonsterWithImage(new MonsterWithCoordinates(i,j,color), IMAGE_FILE));
             }
     }
 
@@ -40,6 +44,8 @@ public class Model {
     {
         return n;
     }
+
+    public List<MonsterWithImage> getMonsterWithImage(){return monsterWithImage;}
 
     //Returns the context for the change in the numbers and locations of monsters.
     //If the user presses the mouse, then the interaction is to eliminate all monsters on the

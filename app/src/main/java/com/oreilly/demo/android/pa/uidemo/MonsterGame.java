@@ -71,7 +71,6 @@ public class MonsterGame {
     //The third keeps track of the remaining time for the game.
     public void play_game()
     {
-
         clockModel.start();
     }
 

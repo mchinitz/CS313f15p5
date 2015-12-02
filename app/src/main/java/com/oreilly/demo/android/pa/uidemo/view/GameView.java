@@ -55,6 +55,10 @@ public class GameView extends View {
 
     //since the constructors for a View are intended for use by Android, we need a separate
     //constructor to be called the first time onDraw gets called.
+
+    /*TODO Michael, why can't we call Constructor() within the GameView constructors instead? And why don't you set
+     *the boolean to true WITHIN the Constructor() method?
+     * */
     public void Constructor()
     {
         loc_pressed = new float [2];
@@ -74,7 +78,7 @@ public class GameView extends View {
                 return find_indices(loc_pressed);
             }
         });
-        monsterGame.getClockModel().Register_Observer(new MonsterView(getContext()) {
+        monsterGame.getClockModel().Register_Observer(new MonsterView() {
 
             @Override
             public Boolean is_expired()
@@ -195,7 +199,7 @@ public class GameView extends View {
            float y = list_of_corners[0][j].get(1);
            canvas.drawLine(width * 0.1f / m,y,(float)(width * (m - 0.1) / m),y,paint);
        }
-        monsterView.draw(canvas, paint, calculate_scale_factor(), model.monsterWithCoordinates);
+        monsterView.draw(canvas, paint, calculate_scale_factor(), model.getMonsterWithImage());
 
         if (!is_constants_constructor_called)
         {
