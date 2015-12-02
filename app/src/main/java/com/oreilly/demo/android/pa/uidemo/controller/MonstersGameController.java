@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.oreilly.demo.android.pa.uidemo.R;
-import com.oreilly.demo.android.pa.uidemo.controller.DefaultOnTouchListener;
 import com.oreilly.demo.android.pa.uidemo.view.GameView;
 
 

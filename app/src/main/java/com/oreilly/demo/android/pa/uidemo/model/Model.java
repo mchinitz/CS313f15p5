@@ -6,6 +6,7 @@ import com.oreilly.demo.android.pa.uidemo.model.Constants;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -24,14 +25,27 @@ public class Model {
         this.m = m;
         this.n = n;
         monsterWithCoordinates = new ArrayList ();
-        //populates the board initially with k monsters, whose positions are random
+        //populates the board initially with k monsters, whose positions are random but distinct
 
         Random random = new Random();
-        for (int i=0; i < Constants.k; i++)
+        List<Integer []> coordinates = new ArrayList ();
+        for (int i=0; i<m; i++)
+            for (int j=0; j<n; j++)
             {
+                Integer [] pair = {i,j};
+                coordinates.add(pair);
+            }
+        Collections.shuffle(coordinates);
+        int num_monsters = 0;
+        for (int i=0; i<m; i++)
+            for (int j=0; j<n; j++)
+            {
+                if (num_monsters >= Constants.k)
+                    return;
                 int color = (random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
-                monsterWithCoordinates.add(new MonsterWithCoordinates(random.nextInt(m),
-                        random.nextInt(n),color));
+                monsterWithCoordinates.add(new MonsterWithCoordinates(coordinates.get(num_monsters)[0],
+                        coordinates.get(num_monsters)[1],color));
+                num_monsters ++;
             }
     }
 
@@ -75,7 +89,7 @@ public class Model {
       List<MonsterWithCoordinates> copy = new ArrayList<> ();
       int length = monsterWithCoordinates.size();
       for (int i=0; i<length; i++)
-          copy.add(monsterWithCoordinates.get(i));
+          copy.add(new MonsterWithCoordinates(monsterWithCoordinates.get(i).getX(),monsterWithCoordinates.get(i).getX(),monsterWithCoordinates.get(i).getColor()));
       return copy;
   }
 
