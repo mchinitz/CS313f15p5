@@ -1,7 +1,7 @@
 import android.graphics.Color;
 
-import com.oreilly.demo.android.pa.uidemo.MonsterGame;
-import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
+import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 
@@ -44,7 +44,6 @@ public class TestUpdateMonstersListener  {
     {
         model.monsterWithCoordinates.clear();
         model.monsterWithCoordinates.add(new MonsterWithCoordinates(0, 0, Color.GREEN));
-        model.monsterWithCoordinates.add(new MonsterWithCoordinates(0, 0, Color.YELLOW));
         List<MonsterWithCoordinates> original_board = model.clone_monsters_list(model.monsterWithCoordinates);
 
         int num_times_in_squares[][] = new int[3][3];
@@ -62,22 +61,22 @@ public class TestUpdateMonstersListener  {
                     num_times_green ++;
             }
             model.monsterWithCoordinates = model.clone_monsters_list(original_board);
-            assertEquals(2, model.Find_Monsters_on_Square(0,0).size());
         }
 
         //now test randomness up to 10% deviation from uniformly distributed
-        assertTrue(num_times_green >= 90000 && num_times_green <= 110000);
+        assertTrue(num_times_green >= 45000 && num_times_green <= 55000);
         for (int i=0; i<3; i++)
             assertEquals(0,num_times_in_squares[i][2]);
         assertEquals(0, num_times_in_squares[0][0]);
         //should never jump to the right column
+
         for (int i=0; i<2; i++)
             for (int j=0; j<2; j++)
                 if (i > 0 || j > 0)
                 {
-                    assert(num_times_in_squares[i][j] >= 60000);
+                    assert(num_times_in_squares[i][j] >= 30000);
                     //assert that the adjacent squares receive at least 90% * 1/3
-                    assert(num_times_in_squares[i][j] <= 73334);
+                    assert(num_times_in_squares[i][j] <= 36667);
                 }
     }
 

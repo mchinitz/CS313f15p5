@@ -2,7 +2,11 @@ package com.oreilly.demo.android.pa.uidemo.model;
 
 import android.graphics.Color;
 
+import com.oreilly.demo.android.pa.uidemo.model.Constants;
+import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -18,21 +22,50 @@ public class Model {
     public List<MonsterWithCoordinates> monsterWithCoordinates;
     private Boolean is_user_initiated = false;
     private int m,n;
-    public Model(int m, int n)
-    {
+
+
+    //TODO I believe the for loops in this class are not ended properly
+    public Model(int m, int n) {
         this.m = m;
         this.n = n;
-        monsterWithCoordinates = new ArrayList ();
+        monsterWithCoordinates = new ArrayList();
+
 
         //populates the board initially with one monster per square.
         //TODO the initial state is wrong
-        for (int i=0; i<m; i++)
-            for (int j=0; j<n; j++)
-            {
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++) {
                 int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
-                monsterWithCoordinates.add(new MonsterWithCoordinates(i,j,color));
-                monsterWithImage.add(new MonsterWithImage(new MonsterWithCoordinates(i,j,color), IMAGE_FILE));
+                monsterWithCoordinates.add(new MonsterWithCoordinates(i, j, color));
+                monsterWithImage.add(new MonsterWithImage(new MonsterWithCoordinates(i, j, color), IMAGE_FILE));
+                //populates the board initially with k monsters, whose positions are random but distinct
             }
+        }
+        Random random = new Random();
+        List<Integer []> coordinates = new ArrayList ();
+        for(int i=0; i<m; i++)
+        {
+            for(int j = 0; j < n; j++) {
+                Integer[] pair = {i, j};
+                coordinates.add(pair);
+            }
+        }
+        Collections.shuffle(coordinates);
+        int num_monsters = 0;
+        for (int i=0; i<m; i++)
+        {
+            for(int j = 0; j < n; j++) {
+                if (num_monsters >= Constants.k) {
+                    return;
+                }
+                int color = (random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
+
+                monsterWithCoordinates.add(new MonsterWithCoordinates(coordinates.get(num_monsters)[0],
+                        coordinates.get(num_monsters)[1], color));
+                num_monsters++;
+            }
+        }
     }
 
     public int getM()
@@ -49,8 +82,7 @@ public class Model {
 
     //Returns the context for the change in the numbers and locations of monsters.
     //If the user presses the mouse, then the interaction is to eliminate all monsters on the
-    //square
-    //TODO but what about if a square has green or yellow
+    //square that are yellow
     public Boolean get_status()
     {
         return is_user_initiated;
@@ -78,7 +110,7 @@ public class Model {
       List<MonsterWithCoordinates> copy = new ArrayList<> ();
       int length = monsterWithCoordinates.size();
       for (int i=0; i<length; i++)
-          copy.add(monsterWithCoordinates.get(i));
+          copy.add(new MonsterWithCoordinates(monsterWithCoordinates.get(i).getX(),monsterWithCoordinates.get(i).getX(),monsterWithCoordinates.get(i).getColor()));
       return copy;
   }
 

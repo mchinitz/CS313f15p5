@@ -6,9 +6,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.view.MotionEvent;
 
-import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
-import com.oreilly.demo.android.pa.uidemo.MonsterGame;
-import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.controller.Board_Calculations;
+import com.oreilly.demo.android.pa.uidemo.controller.GameDurationObserver;
+import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
+import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 import com.oreilly.demo.android.pa.uidemo.observer;
@@ -18,46 +19,67 @@ import com.oreilly.demo.android.pa.uidemo.view.MonsterView;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Matchers.contains;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
+import java.util.Random;
 
-class GameViewTest extends GameView
+class GameViewTest extends Board_Calculations
 {
 
     public GameViewTest(Context context) {
-        super(context);
-        m = 5;
-        n = 5;
+        super(new GameView(context));
+        gameView.m = 5;
+        gameView.n = 5;
     }
 
     public Model curr_model;
     public MonsterGame curr_monster_game;
+    private float I,J;
+
+    @Override
+    public void Constructor()
+    {
+        super.Constructor();
+        gameView.model.monsterWithCoordinates.clear();
+        Random random = new Random();
+        //For this test, there will initially be one monster in every square
+        for (int i=0; i<gameView.m; i++)
+            for (int j=0; j<gameView.n; j++) {
+                int color = (random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
+                gameView.model.monsterWithCoordinates.add(new MonsterWithCoordinates(i,j,color));
+            }
+    }
 
     public void TestConstructor()
     {
-        curr_model = model;
-        curr_monster_game = monsterGame;
+        curr_model = gameView.model;
+        curr_monster_game = gameView.monsterGame;
     }
+
 
     public int getM()
     {
-        return m;
+        return gameView.m;
     }
 
     public int getN()
     {
-        return n;
+        return gameView.n;
     }
 
-    //It is neccessary to overwrite the width and height after the call to getWidth and getHeight.
+    public GameView getGameView()
+    {
+        return gameView;
+    }
+
+    //It is necessary to overwrite the width and height after the call to getWidth and getHeight.
     //We cannot have a legitimate test with width = height = 0.
     @Override
     public List<Float> [][] init_corners()
     {
-        width = 100;
-        height = 200;
+        gameView.width = 100;
+        gameView.height = 200;
         return super.init_corners();
     }
 
@@ -66,44 +88,39 @@ class GameViewTest extends GameView
         return super.find_indices(coordinates);
     }
 
+    public void set_target_coords(float I, float J)
+    {
+        this.I = I;
+        this.J = J;
+
+    }
+
     @Override
     public int [] find_indices(float [] coordinates)
     {
-        coordinates[0] = 45;
-        coordinates[1] = 135;
+        coordinates[0] = I;
+        coordinates[1] = J;
         return super.find_indices(coordinates);
     }
 
-}
 
+}
 
 public class TestOnPress {
 
-    private int locX = 40;
-    private int locY = 120;
+
 
     public GameViewTest gameViewTest = new GameViewTest(mock(Context.class));
 
-    public MonsterWithCoordinates find_monster_at_indices(int x, int y)
-    {
-        for (MonsterWithCoordinates monsterWithCoordinates : gameViewTest.curr_model.monsterWithCoordinates)
-            if (monsterWithCoordinates.getX() == x && monsterWithCoordinates.getY() == y)
-                return monsterWithCoordinates;
-        throw new RuntimeException("No monster with specified indices found. Test failed");
-    }
-
-
-    public int [] initialize()
+    public void initialize()
     {
         gameViewTest.Constructor();
         gameViewTest.TestConstructor();
-        float [] coords = {locX,locY};
-        int [] indices = gameViewTest.find_indices(coords);
-        MonsterWithCoordinates monster = find_monster_at_indices(indices[0],indices[1]);
-        int opposite_color = (monster.getColor() == Color.GREEN) ? Color.YELLOW : Color.GREEN;
-        gameViewTest.curr_model.monsterWithCoordinates.add(new MonsterWithCoordinates(indices[0], indices[1], opposite_color));
+
+        //we will explicitly set the first monster's color to be green, and the second yellow
+        gameViewTest.curr_model.monsterWithCoordinates.get(0).setColor(Color.GREEN);
+        gameViewTest.curr_model.monsterWithCoordinates.get(1).setColor(Color.YELLOW);
         gameViewTest.curr_monster_game.play_game();
-        return indices;
     }
 
     @Test
@@ -127,20 +144,24 @@ public class TestOnPress {
     @Test
     public void Test()
     {
-        int [] indices = initialize();
-
+        initialize();
+        gameViewTest.set_target_coords(0f, 0f);
         //assert that the correct observers are registered
         List<observer> Observers = gameViewTest.curr_monster_game.getObservers();
         assertTrue(((Observers.size() == 3 && Observers.get(0) instanceof UpdateMonstersListener &&
                 Observers.get(1) instanceof MonsterView &&
                 Observers.get(2) instanceof GameDurationObserver)));
 
-        gameViewTest.onPress(mock(MotionEvent.class)); //press at the origin
-        List<MonsterWithCoordinates> list_at_loc = (gameViewTest.curr_model.Find_Monsters_on_Square(indices[0],indices[1]));
-        assertEquals(list_at_loc.size(),1);
-        assertEquals(list_at_loc.get(0).getColor(),Color.GREEN);
+        gameViewTest.getGameView().onPress(mock(MotionEvent.class)); //press at the origin
+        List<MonsterWithCoordinates> list_at_loc = (gameViewTest.curr_model.Find_Monsters_on_Square(0,0));
+        assertEquals(list_at_loc.size(), 1);
+        assertEquals(gameViewTest.curr_monster_game.getCurr_score(), 0); //eliminated no monsters yet
+
+        //now press at (0,1)
+        gameViewTest.set_target_coords(0f,40f);
+        gameViewTest.getGameView().onPress(mock(MotionEvent.class));
+        List<MonsterWithCoordinates> list_at_loc2 = (gameViewTest.curr_model.Find_Monsters_on_Square(0,1));
+        assertEquals(list_at_loc2.size(),0);
         assertEquals(gameViewTest.curr_monster_game.getCurr_score(), 1); //eliminated exactly one monster
     }
-
-
 }

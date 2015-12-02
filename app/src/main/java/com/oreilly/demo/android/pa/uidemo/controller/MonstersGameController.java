@@ -1,14 +1,9 @@
-package com.oreilly.demo.android.pa.uidemo;
+package com.oreilly.demo.android.pa.uidemo.controller;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.R;
-import android.support.annotation.LayoutRes;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-
-import com.oreilly.demo.android.pa.uidemo.view.DefaultOnTouchListener;
 import com.oreilly.demo.android.pa.uidemo.view.GameView;
 
 

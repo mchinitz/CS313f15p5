@@ -1,38 +1,24 @@
 package com.oreilly.demo.android.pa.uidemo.view;
-
 /**
  * Created by Lucas on 11/27/2015.
  */
 
-import android.R;
 
-import android.content.res.Resources;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.AttributeSet;
-import android.util.Pair;
 import java.util.List;
 
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithImage;
 import com.oreilly.demo.android.pa.uidemo.observer;
 
 
-
-
-
-
 //Draws monsters
 public abstract class MonsterView implements observer {
 
     private GameView gameView;
-
     public MonsterView() {
 
     }
-
 
     public void setGameView(GameView gameView) {
         this.gameView = gameView;

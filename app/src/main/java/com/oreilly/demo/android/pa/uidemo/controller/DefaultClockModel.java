@@ -1,7 +1,8 @@
-package com.oreilly.demo.android.pa.uidemo.model.clock;
+package com.oreilly.demo.android.pa.uidemo.controller;
 
 
-import com.oreilly.demo.android.pa.uidemo.MonstersGameController;
+import com.oreilly.demo.android.pa.uidemo.controller.MonstersGameController;
+import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -17,8 +18,6 @@ import java.util.TimerTask;
 //Entire point of extending MonstersGameController is to be able to call runOnUiThread, and
 //to reset content view
 public abstract class DefaultClockModel extends MonstersGameController implements ClockModel {
-
-    // TODO make accurate by keeping track of partial seconds when canceled etc.
 
     private Timer timer;
     private int time_to_wait;
@@ -56,9 +55,6 @@ public abstract class DefaultClockModel extends MonstersGameController implement
         }, /*initial delay before first scheduled event*/ 0, /*periodic delay*/ 1000);
 
     }
-
-    //TODO cite http://stackoverflow.com/questions/17471808/android-add-id-to-a-layout and http://stackoverflow.com/questions/4018772/calling-setcontentview-multiple-times
-
     @Override
     public boolean get_is_expired()
     {

@@ -5,19 +5,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.oreilly.demo.android.pa.uidemo.GameDurationObserver;
-import com.oreilly.demo.android.pa.uidemo.MonsterGame;
-import com.oreilly.demo.android.pa.uidemo.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.controller.Board_Calculations;
+import com.oreilly.demo.android.pa.uidemo.model.Constants;
+import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
+import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
+import com.oreilly.demo.android.pa.uidemo.controller.GameDurationObserver;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
-import com.oreilly.demo.android.pa.uidemo.model.clock.DefaultClockModel;
+import com.oreilly.demo.android.pa.uidemo.controller.DefaultClockModel;
 import com.oreilly.demo.android.pa.uidemo.observer;
 
 /**
@@ -26,19 +27,24 @@ import com.oreilly.demo.android.pa.uidemo.observer;
 
 //This class draws the board and displays the score. The drawing of the monsters is reserved
     //for the MonsterView
-    //TODO is this the real controller? (i.e. should we rename?)
-public class GameView extends View {
-    protected int m = 5, n = 5; //for now
-    protected Model model;
 
+
+public final class GameView extends View {
+    public int m = Constants.m, n = Constants.n;
+    public Model model;
+
+    //Using public access was the lesser evil from implementing setters and getters for all of these
+    //objects. All these objects must be accessible to Board_Calculations, especially for the
+    //lists.
     private Boolean is_constants_constructor_called = false;
-    protected int width, height;
-    protected MonsterGame monsterGame;
-    private List<observer> observerList;
-    private Paint paint;
-    private List<Float> [][] list_of_corners;
-    protected MonsterView monsterView;
-    private float loc_pressed [];
+    public int width, height;
+    public MonsterGame monsterGame;
+    public List<observer> observerList;
+    public Paint paint;
+    public List<Float> [][] list_of_corners;
+    public MonsterView monsterView;
+    public float loc_pressed [];
+    private Board_Calculations board_calculations;
 
     public GameView(Context context) {
         super(context);
@@ -180,7 +186,9 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas) {
         if (!is_constants_constructor_called)
         {
-            Constructor();
+
+            board_calculations = new Board_Calculations(this);
+            board_calculations.Constructor();
        }
 
        set_textview(monsterGame.getCurr_score());
@@ -200,35 +208,32 @@ public class GameView extends View {
            canvas.drawLine(width * 0.1f / m,y,(float)(width * (m - 0.1) / m),y,paint);
        }
         monsterView.draw(canvas, paint, calculate_scale_factor(), model.getMonsterWithImage());
+        monsterView.draw(canvas, paint, board_calculations.calculate_scale_factor(), model.getMonsterWithImage());
 
         if (!is_constants_constructor_called)
         {
             is_constants_constructor_called = true; //don't start a new game during subsequent draws
+            //Note that this call does not violate MVP, since the view is not probing the controller, only
+            //calling it initially to start up operations
             monsterGame.play_game();
         }
 
 
     }
 
-
-
     public boolean onPress(MotionEvent event)
     {
+        if (monsterView.is_expired())
+            return false; //prevents user from cheating by eliminating monsters after the end of the game
        int action = event.getAction() & event.ACTION_MASK;
 
         //at some point
     if (action != event.ACTION_DOWN && action != event.ACTION_POINTER_DOWN)
            return false; //not a mouse-pressing event
-
+       model.set_status(true); //the view changes the model, allowed in MVP (a solid arrow from view to model)
        loc_pressed[0] = event.getX();
        loc_pressed[1] = event.getY();
-
-       //Log.d("Mouse pressed at ", "" + width + " " + height + " " + loc_pressed[0] + " " + loc_pressed[1]);
-
-       model.set_status(true);
        monsterGame.getClockModel().NotifyAll();
        return true;
     }
 }
-
-//THERE IS CLEARLY SOMETHING SPECIFIC ABOUT GAMEVIEW THAT PREVENTS IT FROM GETTING ITS ID
