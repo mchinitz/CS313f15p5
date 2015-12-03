@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.oreilly.demo.android.pa.uidemo.model.Constants;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,27 +18,27 @@ import java.util.Random;
 //This class defines the board and populates monsters on the board
 public class Model {
 
-    private final String IMAGE_FILE = "monster.png";
+    private final String IMAGE_FILE = "C:\\Users\\Lucas\\All AndroidStudio Projects\\cs313f15p5\\app\\src\\main\\res\\mipmap-mdpi\\monster.png";
     private List<MonsterWithImage> monsterWithImage;
     public List<MonsterWithCoordinates> monsterWithCoordinates;
     private Boolean is_user_initiated = false;
     private int m,n;
 
 
-    //TODO I believe the for loops in this class are not ended properly
+    //TODO these for loops are very time inefficent. Is there a way to refactor this?
     public Model(int m, int n) {
         this.m = m;
         this.n = n;
         monsterWithCoordinates = new ArrayList();
+        monsterWithImage = new ArrayList();
 
 
         //populates the board initially with one monster per square.
         //TODO the initial state is wrong
-        for (int i = 0; i < m; i++)
-        {
+        for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
-                monsterWithCoordinates.add(new MonsterWithCoordinates(i, j, color));
+                //monsterWithCoordinates.add(new MonsterWithCoordinates(i, j, color));
                 monsterWithImage.add(new MonsterWithImage(new MonsterWithCoordinates(i, j, color), IMAGE_FILE));
                 //populates the board initially with k monsters, whose positions are random but distinct
             }

@@ -2,8 +2,8 @@ package com.oreilly.demo.android.pa.uidemo.controller;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.R;
 import android.view.View;
+import com.oreilly.demo.android.pa.uidemo.R;
 import com.oreilly.demo.android.pa.uidemo.view.GameView;
 
 
