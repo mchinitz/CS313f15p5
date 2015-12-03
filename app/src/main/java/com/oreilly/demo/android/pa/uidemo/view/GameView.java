@@ -30,7 +30,7 @@ import com.oreilly.demo.android.pa.uidemo.observer;
 
 
 public final class GameView extends View {
-    public int m = Constants.m, n = Constants.n;
+    public int m = Constants.m, n = Constants.n, k = Constants.k;
     public Model model;
 
     //Using public access was the lesser evil from implementing setters and getters for all of these
@@ -71,7 +71,7 @@ public final class GameView extends View {
         width = getWidth();
         height = getHeight();
         observerList = new ArrayList<>();
-        model = new Model(m,n);
+        model = new Model(m,n,k);
         monsterGame = new MonsterGame(this);
         paint = new Paint();
         list_of_corners = init_corners();

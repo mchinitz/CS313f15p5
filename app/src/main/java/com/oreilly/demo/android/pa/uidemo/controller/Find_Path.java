@@ -9,22 +9,22 @@ import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 
 //Performs the technical calculations to determine how the monsters move.
 //The recursion may seem extremely expensive, but the scenareo where monsters are trapped
 //are not very frequent, and modifications near the end of the path are usually sufficient.
 //Thus, the base case will be reached quickly, which immediately kills the recursion.
+//If the number of iterations creeps up too much, we explicitly will generate new random movements
+//and start over
 
 public class Find_Path {
 
         int nrow;
         int ncol;
         int k;
+        int num_iter = 0;
         private List<MonsterWithCoordinates> coordinates;
         private Random random;
         private ArrayList<ArrayList<Integer>> [][] possible_destinations;
@@ -34,9 +34,11 @@ public class Find_Path {
             this.nrow = nrow;
             this.ncol = ncol;
             this.k = k;
+
             this.coordinates = coordinates;
             random = new Random();
             possible_destinations = enum_possible_destinations();
+
         }
 
 
@@ -62,53 +64,75 @@ public class Find_Path {
             return result;
 
         }
-        public boolean recursion(HashMap<ArrayList<Integer>, Integer> path,
-                                        ArrayList<ArrayList<Integer>> [][] possible_destinations,
-                                        List<MonsterWithCoordinates> coordinates, int index_in_nodes)
-        {
-            if (index_in_nodes >= k)
-                return true;
-            int curr_x = coordinates.get(index_in_nodes).getX();
-            int curr_y = coordinates.get(index_in_nodes).getY();
-            for (ArrayList<Integer> point : possible_destinations[curr_x][curr_y])
-            {
-                if (!path.containsKey(point))
-                {
-                    path.put(point,index_in_nodes);
-                    if (recursion(path, possible_destinations, coordinates, index_in_nodes + 1))
-                    {
-                        return true;
-                    }
-                    path.remove(point);
-                }
-            }
+
+    public boolean recursion(combo[][] path, ArrayList<ArrayList<Integer>> [][] possible_destinations,
+         List<MonsterWithCoordinates> coordinates, int index_in_nodes)
+    {
+
+        if (index_in_nodes >= k)
+            return true;
+        num_iter ++;
+        if (num_iter >= 10000)
             return false;
-        }
-        public void find_path()
+        int curr_x = coordinates.get(index_in_nodes).getX();
+        int curr_y = coordinates.get(index_in_nodes).getY();
+        for (ArrayList<Integer> point : possible_destinations[curr_x][curr_y])
         {
-            HashMap<ArrayList<Integer>, Integer> path = new HashMap<ArrayList<Integer>, Integer> ();
-            recursion(path,possible_destinations,coordinates,0);
-            for (int i=0; i<k; i++)
+            if (!path[point.get(0)][point.get(1)].is_claimed)
             {
-                ArrayList<Integer> new_coordinates = find_value(path, i);
-                coordinates.get(i).setX(new_coordinates.get(0));
-                coordinates.get(i).setY(new_coordinates.get(1));
-                coordinates.get(i).setColor(((random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW));
-
+                path[point.get(0)][point.get(1)].is_claimed = true;
+                path[point.get(0)][point.get(1)].index = index_in_nodes;
+                if (recursion(path, possible_destinations, coordinates, index_in_nodes + 1))
+                {
+                    return true;
+                }
+                path[point.get(0)][point.get(1)].is_claimed = false;
             }
         }
+        return false;
+    }
 
-        public ArrayList find_value(HashMap <ArrayList<Integer>, Integer> map, Integer value)
-        {
-            Iterator<Entry<ArrayList<Integer>, Integer>> it = map.entrySet().iterator();
-            while (it.hasNext())
+    public void find_path()
+    {
+        combo [][] path = new combo [nrow][ncol];
+        for (int i=0; i<nrow; i++)
+            for (int j=0; j<ncol; j++)
             {
-                Entry<ArrayList<Integer>, Integer> ele = it.next();
-                if (ele.getValue() == value)
-                    return ele.getKey();
+                path[i][j] = new combo(false, -1);
             }
-            throw new RuntimeException("value not found");
+
+        while (!recursion(path,possible_destinations, coordinates, 0))
+        {
+            num_iter = 0;
+            for (int i=0; i<nrow; i++)
+                for (int j=0; j<ncol; j++)
+                {
+                    assert(!path[i][j].is_claimed);
+                    Collections.shuffle(possible_destinations[i][j]);
+                }
         }
 
+        /*if (!recursion(path,possible_destinations,coordinates,0))
+            throw new RuntimeException();*/
+        for (int i=0; i<k; i++)
+        {
+            ArrayList<Integer> new_coordinates = find_value(path, i);
+            coordinates.get(i).setX(new_coordinates.get(0));
+            coordinates.get(i).setY(new_coordinates.get(1));
+            coordinates.get(i).setColor(((random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW));
 
+        }
+    }
+
+    public ArrayList find_value(combo[][] map, int value) {
+        for (int i = 0; i < nrow; i++)
+            for (int j = 0; j < ncol; j++)
+                if (map[i][j].index == value) {
+                    ArrayList<Integer> result = new ArrayList();
+                    result.add(i);
+                    result.add(j);
+                    return result;
+                }
+        throw new RuntimeException("value " + value + " not found");
+    }
 }

@@ -35,7 +35,7 @@ public class Board_Calculations {
         gameView.width = gameView.getWidth();
         gameView.height = gameView.getHeight();
         gameView.observerList = new ArrayList<>();
-        gameView.model = new Model(gameView.m,gameView.n);
+        gameView.model = new Model(gameView.m,gameView.n, gameView.k);
         gameView.monsterGame = new MonsterGame(gameView);
         gameView.paint = new Paint();
         gameView.list_of_corners = init_corners();

@@ -22,51 +22,34 @@ public class Model {
     private List<MonsterWithImage> monsterWithImage;
     public List<MonsterWithCoordinates> monsterWithCoordinates;
     private Boolean is_user_initiated = false;
-    private int m,n;
+    private int m,n,k;
 
-
-    //TODO these for loops are very time inefficent. Is there a way to refactor this?
-    public Model(int m, int n) {
+    public Model(int m, int n, int k) {
         this.m = m;
         this.n = n;
+        this.k = k;
         monsterWithCoordinates = new ArrayList();
         monsterWithImage = new ArrayList();
 
 
-        //populates the board initially with one monster per square.
-        //TODO the initial state is wrong
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
-                //monsterWithCoordinates.add(new MonsterWithCoordinates(i, j, color));
-                monsterWithImage.add(new MonsterWithImage(new MonsterWithCoordinates(i, j, color), IMAGE_FILE));
-                //populates the board initially with k monsters, whose positions are random but distinct
-            }
-        }
-        Random random = new Random();
-        List<Integer []> coordinates = new ArrayList ();
-        for(int i=0; i<m; i++)
-        {
-            for(int j = 0; j < n; j++) {
-                Integer[] pair = {i, j};
-                coordinates.add(pair);
-            }
-        }
-        Collections.shuffle(coordinates);
-        int num_monsters = 0;
-        for (int i=0; i<m; i++)
-        {
-            for(int j = 0; j < n; j++) {
-                if (num_monsters >= Constants.k) {
-                    return;
-                }
-                int color = (random.nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
+        //populates the board initially with k monsters, at most one monster per square.
 
-                monsterWithCoordinates.add(new MonsterWithCoordinates(coordinates.get(num_monsters)[0],
-                        coordinates.get(num_monsters)[1], color));
-                num_monsters++;
+        List<Integer []> possible_coordinates = new ArrayList ();
+        for (int i=0; i<m; i++)
+            for (int j=0; j<n; j++) {
+                Integer [] pair = {i,j};
+                possible_coordinates.add(pair);
             }
+        Collections.shuffle(possible_coordinates);
+
+        for (int i=0; i<k; i++)
+        {
+            int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
+            monsterWithImage.add(new MonsterWithImage(new MonsterWithCoordinates(possible_coordinates.get(i)[0], possible_coordinates.get(i)[1], color), IMAGE_FILE));
+
         }
+
+
     }
 
     public int getM()
@@ -78,6 +61,8 @@ public class Model {
     {
         return n;
     }
+
+    public int getK() {return k;}
 
     public List<MonsterWithImage> getMonsterWithImage(){return monsterWithImage;}
 
