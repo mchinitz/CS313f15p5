@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import java.util.List;
 
-import com.oreilly.demo.android.pa.uidemo.model.MonsterWithImage;
+import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 import com.oreilly.demo.android.pa.uidemo.observer;
 
 
@@ -28,14 +28,13 @@ public abstract class MonsterView implements observer {
     public abstract List<Float> get_corner(int i, int j);
 
     //Draws a single monster to the canvas
-    public final void draw_monster(Canvas canvas, Paint paint, MonsterWithImage monster, float scale_factor) {
+    public final void draw_monster(Canvas canvas, Paint paint, MonsterWithCoordinates monster, float scale_factor) {
         //TODO implement this function
 
-        canvas.drawBitmap(monster.getMonsterSprite(), monster.getX(), monster.getY(), paint);
-        /*temporarily
+        //temporarily
         paint.setColor(monster.getColor());
         List<Float> corner = get_corner(monster.getX(), monster.getY());
-        canvas.drawCircle(corner.get(0) + scale_factor / 2, corner.get(1) + scale_factor / 2, scale_factor / 2, paint);*/
+        canvas.drawCircle(corner.get(0) + scale_factor / 2, corner.get(1) + scale_factor / 2, scale_factor / 2, paint);
     }
 
 
@@ -53,11 +52,11 @@ public abstract class MonsterView implements observer {
     }
 
     //Draws the monsters to the canvas
-    public void draw(Canvas canvas, Paint paint, float scale_factor, List<MonsterWithImage> monsterWithImageList)
+    public void draw(Canvas canvas, Paint paint, float scale_factor, List<MonsterWithCoordinates> monsterWithCoordinatesList)
     {
 
-        if(monsterWithImageList == null) { throw new NullPointerException("monsters list may not be null!"); }
-        for(MonsterWithImage m : monsterWithImageList) {
+        if(monsterWithCoordinatesList == null) { return; }
+        for(MonsterWithCoordinates m : monsterWithCoordinatesList) {
             draw_monster(canvas,paint,m,scale_factor);
         }
 

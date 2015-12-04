@@ -6,7 +6,6 @@ import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.controller.combo;
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
-import com.oreilly.demo.android.pa.uidemo.model.MonsterWithImage;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
@@ -90,27 +89,8 @@ public class TestUpdateMonstersListener  {
 
         };
         model2 = new Model(10,10,50);
-        init_coords();
     }
 
-    //Todo get rid of once Model is correct
-
-    public void init_coords()
-    {
-        List<Integer []> possible_coordinates = new ArrayList ();
-        for (int i=0; i<model2.getM(); i++)
-            for (int j=0; j<model2.getN(); j++) {
-                Integer [] pair = {i,j};
-                possible_coordinates.add(pair);
-            }
-        Collections.shuffle(possible_coordinates);
-        for (int i=0; i<model2.getK(); i++)
-        {
-            int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
-            model2.monsterWithCoordinates.add(new MonsterWithCoordinates(possible_coordinates.get(i)[0], possible_coordinates.get(i)[1],color));
-        }
-
-    }
 
 
 
@@ -157,6 +137,8 @@ public class TestUpdateMonstersListener  {
     }
 
     //this checks the time taken to update positions
+
+    //TODO change over to using monsterWithImages when that is working
     @Test
     public void TestUpdate2()
     {
@@ -168,11 +150,16 @@ public class TestUpdateMonstersListener  {
             int final_head_coords [] = {model2.monsterWithCoordinates.get(0).getX(), model2.monsterWithCoordinates.get(0).getY()};
             for (int j=0; j<2; j++)
                 assert(Math.abs(final_head_coords[j] - initial_head_coords[j]) <= 1);
-
+            test_if_unique();
         }
     }
 
-
-
-
+    public void test_if_unique()
+    {
+        for (int i=0; i<model2.getK(); i++)
+            for (int j=0; j<model2.getK(); j++)
+                if (i != j)
+                    assert((model2.monsterWithCoordinates.get(i).getX() != model2.monsterWithCoordinates.get(j).getX()) ||
+                            (model2.monsterWithCoordinates.get(i).getY() != model2.monsterWithCoordinates.get(j).getY()));
+    }
 }

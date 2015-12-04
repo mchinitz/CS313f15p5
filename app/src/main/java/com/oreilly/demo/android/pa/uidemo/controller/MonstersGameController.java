@@ -35,9 +35,14 @@ public class MonstersGameController extends Activity {
         setContentView(R.layout.activitymain);
         init_score_view();
 
+        //sets up the canvas to connect to gameview
         GameView view = (GameView) findViewById(R.id.canvas);
         if (view == null)
             throw new RuntimeException();
+        //sets the listener to mouse-click events
         view.setOnTouchListener(new DefaultOnTouchListener());
+
+
+
     }
 }

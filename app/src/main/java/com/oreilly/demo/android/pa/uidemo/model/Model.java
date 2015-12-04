@@ -2,10 +2,6 @@ package com.oreilly.demo.android.pa.uidemo.model;
 
 import android.graphics.Color;
 
-import com.oreilly.demo.android.pa.uidemo.model.Constants;
-import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,8 +14,6 @@ import java.util.Random;
 //This class defines the board and populates monsters on the board
 public class Model {
 
-    private final String IMAGE_FILE = "C:\\Users\\Lucas\\All AndroidStudio Projects\\cs313f15p5\\app\\src\\main\\res\\mipmap-mdpi\\monster.png";
-    private List<MonsterWithImage> monsterWithImage;
     public List<MonsterWithCoordinates> monsterWithCoordinates;
     private Boolean is_user_initiated = false;
     private int m,n,k;
@@ -29,7 +23,6 @@ public class Model {
         this.n = n;
         this.k = k;
         monsterWithCoordinates = new ArrayList();
-        monsterWithImage = new ArrayList();
 
 
         //populates the board initially with k monsters, at most one monster per square.
@@ -45,7 +38,7 @@ public class Model {
         for (int i=0; i<k; i++)
         {
             int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
-            monsterWithImage.add(new MonsterWithImage(new MonsterWithCoordinates(possible_coordinates.get(i)[0], possible_coordinates.get(i)[1], color), IMAGE_FILE));
+            monsterWithCoordinates.add(new MonsterWithCoordinates(possible_coordinates.get(i)[0], possible_coordinates.get(i)[1], color));
 
         }
 
@@ -63,8 +56,6 @@ public class Model {
     }
 
     public int getK() {return k;}
-
-    public List<MonsterWithImage> getMonsterWithImage(){return monsterWithImage;}
 
     //Returns the context for the change in the numbers and locations of monsters.
     //If the user presses the mouse, then the interaction is to eliminate all monsters on the
