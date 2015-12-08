@@ -2,6 +2,7 @@ package com.oreilly.demo.android.pa.uidemo.controller;
 
 
 import com.oreilly.demo.android.pa.uidemo.controller.MonstersGameController;
+import com.oreilly.demo.android.pa.uidemo.model.Constants;
 import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
 
 import java.util.Timer;
@@ -29,9 +30,9 @@ public abstract class DefaultClockModel extends MonstersGameController implement
     }
 
     @Override
-    public int get_time_to_wait()
+    public float get_time_to_wait()
     {
-        return time_to_wait / 1000;
+        return time_to_wait / 1000.0f;
     }
 
     @Override
@@ -45,7 +46,7 @@ public abstract class DefaultClockModel extends MonstersGameController implement
                 synchronized (this) {
 
                     runOnUiThread(() -> {
-                        time_to_wait -= 1000;
+                        time_to_wait -= Constants.amount_time_between_movements;
                         if (time_to_wait == 0) {
                             is_expired = true;
                         }
@@ -56,7 +57,7 @@ public abstract class DefaultClockModel extends MonstersGameController implement
                     });
                 }
             }
-        }, /*initial delay before first scheduled event*/ 0, /*periodic delay*/ 1000);
+        }, /*initial delay before first scheduled event*/ 0, /*periodic delay*/ Constants.amount_time_between_movements);
 
     }
     @Override

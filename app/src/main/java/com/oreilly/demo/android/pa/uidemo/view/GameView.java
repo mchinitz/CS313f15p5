@@ -63,7 +63,7 @@ public final class GameView extends View {
     {
         TextView view = (TextView)((DefaultClockModel)(monsterGame.getClockModel())).getScore_view();
         view.setText("Current Score: " + new Integer(value).toString()  + "\n" +
-        "Time Remaining: " + new Integer(monsterGame.getClockModel().get_time_to_wait()).toString());
+        "Time Remaining: " + new Float(monsterGame.getClockModel().get_time_to_wait()).toString());
     }
 
     @Override
