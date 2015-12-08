@@ -19,11 +19,11 @@ import java.util.List;
     //(not yet implemented).
 public class MonsterGame {
 
-    private int gameplay_time = Constants.gameplay_time; //for now, and in seconds
+    private int gameplay_time = Constants.gameplay_time;
     private ClockModel clockModel;
     private List<observer> Observers;
     private int curr_score = 0;
-    public MonsterGame(GameView gameView)
+    public MonsterGame()
     {
        Observers = new ArrayList<> ();
         //use gameplay_time + 1 since actually an event occurs immediately

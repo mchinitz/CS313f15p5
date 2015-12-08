@@ -6,13 +6,6 @@ package com.oreilly.demo.android.pa.uidemo.model;
 public class MonsterWithCoordinates extends Monster {
     private int x,y;
 
-    public MonsterWithCoordinates()
-    {
-        x=0;
-        y=0;
-        color = -1;
-    }
-
     public MonsterWithCoordinates(int x, int y, int color)
     {
         this.x = x;
@@ -28,8 +21,6 @@ public class MonsterWithCoordinates extends Monster {
         return y;
     }
 
-
-    //TODO small question, but should these technically be protected?
     public void setX(int x){
         this.x = x;
     }

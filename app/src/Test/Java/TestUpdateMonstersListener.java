@@ -150,6 +150,7 @@ public class TestUpdateMonstersListener  {
             int final_head_coords [] = {model2.monsterWithCoordinates.get(0).getX(), model2.monsterWithCoordinates.get(0).getY()};
             for (int j=0; j<2; j++)
                 assert(Math.abs(final_head_coords[j] - initial_head_coords[j]) <= 1);
+            assert(final_head_coords[0] != initial_head_coords[0] || final_head_coords[1] != initial_head_coords[1]); //assert moved
             test_if_unique();
         }
     }

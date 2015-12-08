@@ -29,6 +29,8 @@ public abstract class UpdateMonstersListener implements monster_observer {
         this.monsterGame = monsterGame;
     }
 
+
+
     //For each monster, randomly select an adjacent square on the board (never the same square).
     //Also, randomly select a new color.
     @Override

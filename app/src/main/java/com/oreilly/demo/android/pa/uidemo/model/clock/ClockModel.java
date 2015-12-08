@@ -9,4 +9,5 @@ public interface ClockModel extends Subject {
     void start();
     void stop();
     boolean get_is_expired();
+    public int get_time_to_wait();
 }

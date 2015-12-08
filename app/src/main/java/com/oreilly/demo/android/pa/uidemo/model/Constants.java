@@ -5,8 +5,8 @@ package com.oreilly.demo.android.pa.uidemo.model;
  */
 public final class Constants {
 
-    public static final int m = 5;
-    public static final int n = 5;
-    public static final int k = 10;
+    public static final int m = 10;
+    public static final int n = 10;
+    public static final int k = 50;
     public static final int gameplay_time = 15;
 }

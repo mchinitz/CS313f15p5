@@ -22,6 +22,7 @@ public class Model {
         this.m = m;
         this.n = n;
         this.k = k;
+
         monsterWithCoordinates = new ArrayList();
 
 
@@ -34,7 +35,6 @@ public class Model {
                 possible_coordinates.add(pair);
             }
         Collections.shuffle(possible_coordinates);
-
         for (int i=0; i<k; i++)
         {
             int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;

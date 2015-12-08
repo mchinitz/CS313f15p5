@@ -28,12 +28,16 @@ public abstract class DefaultClockModel extends MonstersGameController implement
         time_to_wait = time;
     }
 
+    @Override
+    public int get_time_to_wait()
+    {
+        return time_to_wait / 1000;
+    }
 
     @Override
     public void start() {
 
         timer = new Timer();
-        MonstersGameController controller = this;
 
         timer.schedule(new TimerTask() {
             @Override

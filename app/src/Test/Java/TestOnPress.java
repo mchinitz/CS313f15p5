@@ -31,6 +31,7 @@ class GameViewTest extends Board_Calculations
         super(new GameView(context));
         gameView.m = 5;
         gameView.n = 5;
+        gameView.k = 0;
     }
 
     public Model curr_model;
@@ -41,7 +42,7 @@ class GameViewTest extends Board_Calculations
     public void Constructor()
     {
         super.Constructor();
-        gameView.model.monsterWithCoordinates.clear();
+        //gameView.model.monsterWithCoordinates.clear();
         Random random = new Random();
         //For this test, there will initially be one monster in every square
         for (int i=0; i<gameView.m; i++)
