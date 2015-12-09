@@ -31,7 +31,7 @@ class GameViewTest extends Board_Calculations
         super(new GameView(context));
         gameView.m = 5;
         gameView.n = 5;
-        gameView.k = 0;
+        gameView.numberOfMonsters = 0;
     }
 
     public Model curr_model;

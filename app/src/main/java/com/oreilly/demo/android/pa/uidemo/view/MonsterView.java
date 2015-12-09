@@ -5,6 +5,7 @@ package com.oreilly.demo.android.pa.uidemo.view;
 
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import java.util.List;
 
@@ -29,12 +30,15 @@ public abstract class MonsterView implements observer {
 
     //Draws a single monster to the canvas
     public final void draw_monster(Canvas canvas, Paint paint, MonsterWithCoordinates monster, float scale_factor) {
-        //TODO implement this function
-
-        //temporarily
         paint.setColor(monster.getColor());
         List<Float> corner = get_corner(monster.getX(), monster.getY());
         canvas.drawCircle(corner.get(0) + scale_factor / 2, corner.get(1) + scale_factor / 2, scale_factor / 2, paint);
+
+        paint.setColor(Color.BLACK);
+        canvas.drawCircle(corner.get(0) + scale_factor / 3, corner.get(1) + scale_factor / 3, scale_factor / 8, paint);
+        canvas.drawCircle(corner.get(0) + (2*scale_factor / 3), corner.get(1) + scale_factor / 3, scale_factor / 8, paint);
+        //canvas.drawArc(corner.get(0) + scale_factor/3, corner.get(1) + scale_factor / 5, corner.get(0) + (2*scale_factor / 3), corner.get(1) + scale_factor / 8, 95, 45, true, paint);
+
     }
 
 

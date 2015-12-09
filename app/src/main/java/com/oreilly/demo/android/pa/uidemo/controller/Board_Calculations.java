@@ -1,6 +1,5 @@
 package com.oreilly.demo.android.pa.uidemo.controller;
 
-import android.content.Context;
 import android.graphics.Paint;
 
 import com.oreilly.demo.android.pa.uidemo.model.Model;
@@ -35,7 +34,7 @@ public class Board_Calculations {
         gameView.width = gameView.getWidth();
         gameView.height = gameView.getHeight();
         gameView.observerList = new ArrayList<>();
-        gameView.model = new Model(gameView.m,gameView.n, gameView.k);
+        gameView.model = new Model(gameView.m,gameView.n, gameView.numberOfMonsters);
         gameView.monsterGame = new MonsterGame();
         gameView.paint = new Paint();
         gameView.list_of_corners = init_corners();

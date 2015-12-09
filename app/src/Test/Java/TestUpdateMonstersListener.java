@@ -13,9 +13,7 @@ import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 //The point of mockito here is because we want a mock view
 
@@ -29,8 +27,8 @@ class Check_Find_Path extends Find_Path
 
     private long initial_time;
 
-    public Check_Find_Path(int nrow, int ncol, int k, List<MonsterWithCoordinates> coordinates) {
-        super(nrow, ncol, k, coordinates);
+    public Check_Find_Path(int nrow, int ncol, int numberOfMonsters, List<MonsterWithCoordinates> coordinates) {
+        super(nrow, ncol, numberOfMonsters, coordinates);
         initial_time = System.currentTimeMillis();
     }
 
@@ -63,7 +61,7 @@ class Check_Update_Listener extends UpdateMonstersListener
     @Override
     public Object update()
     {
-        new Check_Find_Path(model.getM(), model.getN(), model.getK(),model.monsterWithCoordinates).find_path();
+        new Check_Find_Path(model.getM(), model.getN(), model.getNumberOfMonsters(),model.monsterWithCoordinates).find_path();
         return null;
     }
 }
@@ -157,8 +155,8 @@ public class TestUpdateMonstersListener  {
 
     public void test_if_unique()
     {
-        for (int i=0; i<model2.getK(); i++)
-            for (int j=0; j<model2.getK(); j++)
+        for (int i=0; i<model2.getNumberOfMonsters(); i++)
+            for (int j=0; j<model2.getNumberOfMonsters(); j++)
                 if (i != j)
                     assert((model2.monsterWithCoordinates.get(i).getX() != model2.monsterWithCoordinates.get(j).getX()) ||
                             (model2.monsterWithCoordinates.get(i).getY() != model2.monsterWithCoordinates.get(j).getY()));

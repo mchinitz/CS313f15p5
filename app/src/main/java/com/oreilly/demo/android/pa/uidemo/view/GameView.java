@@ -12,11 +12,9 @@ import android.widget.TextView;
 import com.oreilly.demo.android.pa.uidemo.controller.Board_Calculations;
 import com.oreilly.demo.android.pa.uidemo.model.Constants;
 import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
-import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
-import com.oreilly.demo.android.pa.uidemo.controller.GameDurationObserver;
 
 import java.util.List;
-import java.util.ArrayList;
+
 import com.oreilly.demo.android.pa.uidemo.model.Model;
 import com.oreilly.demo.android.pa.uidemo.controller.DefaultClockModel;
 import com.oreilly.demo.android.pa.uidemo.observer;
@@ -30,7 +28,7 @@ import com.oreilly.demo.android.pa.uidemo.observer;
 
 
 public final class GameView extends View {
-    public int m = Constants.m, n = Constants.n, k = Constants.k;
+    public int m = Constants.m, n = Constants.n, numberOfMonsters = Constants.numberOfMonsters;
     public Model model;
 
     //Using public access was the lesser evil from implementing setters and getters for all of these

@@ -16,17 +16,17 @@ public class Model {
 
     public List<MonsterWithCoordinates> monsterWithCoordinates;
     private Boolean is_user_initiated = false;
-    private int m,n,k;
+    private int m,n, numberOfMonsters;
 
-    public Model(int m, int n, int k) {
+    public Model(int m, int n, int numberOfMonsters) {
         this.m = m;
         this.n = n;
-        this.k = k;
+        this.numberOfMonsters = numberOfMonsters;
 
         monsterWithCoordinates = new ArrayList();
 
 
-        //populates the board initially with k monsters, at most one monster per square.
+        //populates the board initially with numberOfMonsters monsters, at most one monster per square.
 
         List<Integer []> possible_coordinates = new ArrayList ();
         for (int i=0; i<m; i++)
@@ -35,7 +35,7 @@ public class Model {
                 possible_coordinates.add(pair);
             }
         Collections.shuffle(possible_coordinates);
-        for (int i=0; i<k; i++)
+        for (int i=0; i<numberOfMonsters; i++)
         {
             int color = (new Random().nextInt(2) == 1) ? Color.GREEN : Color.YELLOW;
             monsterWithCoordinates.add(new MonsterWithCoordinates(possible_coordinates.get(i)[0], possible_coordinates.get(i)[1], color));
@@ -55,7 +55,7 @@ public class Model {
         return n;
     }
 
-    public int getK() {return k;}
+    public int getNumberOfMonsters() {return numberOfMonsters;}
 
     //Returns the context for the change in the numbers and locations of monsters.
     //If the user presses the mouse, then the interaction is to eliminate all monsters on the

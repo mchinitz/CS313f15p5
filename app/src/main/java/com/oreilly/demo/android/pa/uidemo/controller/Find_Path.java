@@ -23,17 +23,17 @@ public class Find_Path {
 
         int nrow;
         int ncol;
-        int k;
+        int numberOfMonsters;
         int num_iter = 0;
         private List<MonsterWithCoordinates> coordinates;
         private Random random;
         private ArrayList<ArrayList<Integer>> [][] possible_destinations;
 
-    public Find_Path(int nrow, int ncol, int k, List<MonsterWithCoordinates> coordinates)
+    public Find_Path(int nrow, int ncol, int numberOfMonsters, List<MonsterWithCoordinates> coordinates)
         {
             this.nrow = nrow;
             this.ncol = ncol;
-            this.k = k;
+            this.numberOfMonsters = numberOfMonsters;
 
             this.coordinates = coordinates;
             random = new Random();
@@ -69,7 +69,7 @@ public class Find_Path {
          List<MonsterWithCoordinates> coordinates, int index_in_nodes)
     {
 
-        if (index_in_nodes >= k)
+        if (index_in_nodes >= numberOfMonsters)
             return true;
         num_iter ++;
         if (num_iter >= 10000)
@@ -114,7 +114,7 @@ public class Find_Path {
 
         /*if (!recursion(path,possible_destinations,coordinates,0))
             throw new RuntimeException();*/
-        for (int i=0; i<k; i++)
+        for (int i=0; i< numberOfMonsters; i++)
         {
             ArrayList<Integer> new_coordinates = find_value(path, i);
             coordinates.get(i).setX(new_coordinates.get(0));
