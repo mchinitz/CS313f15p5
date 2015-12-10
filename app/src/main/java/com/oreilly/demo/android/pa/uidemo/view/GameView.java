@@ -27,7 +27,7 @@ import com.oreilly.demo.android.pa.uidemo.observer;
     //for the MonsterView
 
 
-public final class GameView extends View {
+public class GameView extends View {
     public int m = Constants.m, n = Constants.n, numberOfMonsters = Constants.numberOfMonsters;
     public Model model;
 
@@ -65,7 +65,7 @@ public final class GameView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    public void onDraw(Canvas canvas) {
         if (!is_constants_constructor_called)
         {
 

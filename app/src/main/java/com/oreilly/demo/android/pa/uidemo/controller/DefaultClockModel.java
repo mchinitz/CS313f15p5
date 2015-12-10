@@ -5,6 +5,10 @@ import com.oreilly.demo.android.pa.uidemo.controller.MonstersGameController;
 import com.oreilly.demo.android.pa.uidemo.model.Constants;
 import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayDeque;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,16 +27,55 @@ public abstract class DefaultClockModel extends MonstersGameController implement
     private Timer timer;
     private int time_to_wait;
     private boolean is_expired = false;
+    private Queue<Method> queue;
 
     public DefaultClockModel(int time)
     {
         time_to_wait = time;
+        queue = new ArrayDeque<Method>();
+
+    }
+
+    public int get_queue_size()
+    {
+        return queue.size();
     }
 
     @Override
     public float get_time_to_wait()
     {
         return time_to_wait / 1000.0f;
+    }
+
+    //The reason for this is it is the way to let Roboelectric execute the method that Android
+    //would have while running the app.
+    public void empty_queue()
+    {
+        while (!queue.isEmpty())
+        {
+            try {
+                queue.peek().invoke(this);
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+                throw new RuntimeException();
+            }
+            queue.remove();
+        }
+    }
+
+    public boolean method_to_fire()
+    {
+        time_to_wait -= Constants.amount_time_between_movements;
+        if (time_to_wait == 0) {
+            is_expired = true;
+        }
+        // fire event
+        NotifyAll();
+        if (get_is_expired())
+            return true;
+        else
+            return false;
     }
 
     @Override
@@ -44,15 +87,15 @@ public abstract class DefaultClockModel extends MonstersGameController implement
             @Override
             public void run() {
                 synchronized (this) {
+                    try {
+                        queue.add(DefaultClockModel.class.getMethod("method_to_fire"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        throw new RuntimeException();
+                    }
 
-                    runOnUiThread(() -> {
-                        time_to_wait -= Constants.amount_time_between_movements;
-                        if (time_to_wait == 0) {
-                            is_expired = true;
-                        }
-                        // fire event
-                        NotifyAll();
-                        if (get_is_expired())
+                    runOnUiThread (() -> {
+                        if (method_to_fire())
                             return;
                     });
                 }
