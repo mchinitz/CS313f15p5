@@ -1,0 +1,16 @@
+Classes:
+
+Monsters witb coordinates are monsters. The former is thus a subclass.
+
+The concrete observers are DefaultOnTouchListener, GameDurationObserver, MonsterView,
+and UpdateMonstersListener. (The MonsterView's update method is to invalidate the view.)
+
+Instances:
+
+The controller (specifically in the class Board_Calculations) is composed of a model and a view.
+It serves as an "interface" between the two components, updating each part and calling appropriate
+methods. This is consistent with MVC.
+
+The model has monsters with coordinates (and methods to update their positions).
+The view has a canvas to display to the user.
+

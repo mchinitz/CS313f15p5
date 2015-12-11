@@ -136,7 +136,6 @@ public class TestUpdateMonstersListener  {
 
     //this checks the time taken to update positions
 
-    //TODO change over to using monsterWithImages when that is working
     @Test
     public void TestUpdate2()
     {

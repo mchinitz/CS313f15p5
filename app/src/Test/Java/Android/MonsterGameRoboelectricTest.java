@@ -2,20 +2,16 @@ package Android;
 
 import android.graphics.Canvas;
 import android.support.annotation.UiThread;
+import android.test.UiThreadTest;
 
 import com.oreilly.demo.android.pa.uidemo.R;
 import com.oreilly.demo.android.pa.uidemo.controller.DefaultClockModel;
-import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
 import com.oreilly.demo.android.pa.uidemo.controller.MonstersGameController;
 import com.oreilly.demo.android.pa.uidemo.controller.UpdateMonstersListener;
 import com.oreilly.demo.android.pa.uidemo.model.Constants;
-import com.oreilly.demo.android.pa.uidemo.observer;
 import com.oreilly.demo.android.pa.uidemo.view.GameView;
 
 import org.junit.Test;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.mock;
@@ -27,8 +23,8 @@ import static org.mockito.Mockito.verify;
  */
 
 //The entire idea behind this test is that if the unit tests pass, we only need to test whether
-    //UpdateMonstersListener.update is called once with the right model state,
-    // for we know update is correct.
+//UpdateMonstersListener.update is called once with the right model state,
+// for we know update is correct.
 
 
 public abstract class MonsterGameRoboelectricTest {
@@ -43,7 +39,8 @@ public abstract class MonsterGameRoboelectricTest {
         assert(getActivity() != null);
     }
 
-    @Test
+
+    @UiThreadTest //[1]
     public void test_monster_game() {
 
 
@@ -52,16 +49,13 @@ public abstract class MonsterGameRoboelectricTest {
 
         gameView.onDraw(new Canvas());
         assert (gameView.observerList.get(0) instanceof UpdateMonstersListener);
+        DefaultClockModel defaultClockModel = (DefaultClockModel)(gameView.monsterGame.getClockModel());
 
-
-
-        while (((DefaultClockModel)(gameView.monsterGame.getClockModel())).get_queue_size() == 0);
-        ((DefaultClockModel)(gameView.monsterGame.getClockModel())).empty_queue();
+        while (defaultClockModel.get_queue_size() == 0);
+        defaultClockModel.empty_queue();
 
         //before creating mock, empties out all initial interactions
         gameView.observerList.set(0, mock(UpdateMonstersListener.class));
-
-
 
         try
         {
@@ -72,11 +66,8 @@ public abstract class MonsterGameRoboelectricTest {
             throw new RuntimeException();
         }
 
-        ((DefaultClockModel)(gameView.monsterGame.getClockModel())).empty_queue();
+        defaultClockModel.empty_queue();
         verify(gameView.observerList.get(0)).update();
         assertFalse(gameView.model.get_status());
     }
-
-
-
 }

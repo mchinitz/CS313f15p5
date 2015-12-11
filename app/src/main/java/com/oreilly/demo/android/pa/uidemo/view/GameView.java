@@ -23,8 +23,17 @@ import com.oreilly.demo.android.pa.uidemo.observer;
  * Created by Michael on 11/22/2015.
  */
 
-//This class draws the board and displays the score. The drawing of the monsters is reserved
-    //for the MonsterView
+/*
+
+This class draws the board and displays the score. The drawing of the monsters is reserved
+for the MonsterView. The onPress method is reusable because any application responding to mouse
+clicks and wanting to know where on the screen the mouse was clicked can reuse the syntax.
+There are some lines in that function which will not be used for a generic onPress function,
+and they would have to be deleted before using the function in a different application.
+
+ */
+
+
 
 
 public class GameView extends View {

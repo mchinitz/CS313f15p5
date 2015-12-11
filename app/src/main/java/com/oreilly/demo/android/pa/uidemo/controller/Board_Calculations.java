@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 //This class performs the calculations to build and maintain the board. The results
-    //are sent directly to the view
+    //are sent directly to the view.
 public class Board_Calculations {
 
 
@@ -130,7 +130,6 @@ public class Board_Calculations {
     }
 
     //returns the length of the bounding box around any of the monsters.
-    //TODO do we really want the monster to not fill up the box (i.e. using 0.9f)
     public float calculate_scale_factor()
     {
         return Math.min(0.9f * gameView.width / gameView.m, 0.9f * gameView.height / gameView.n);

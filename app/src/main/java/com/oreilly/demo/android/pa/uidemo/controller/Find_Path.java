@@ -4,6 +4,7 @@ package com.oreilly.demo.android.pa.uidemo.controller;
  * Created by Michael on 12/1/2015.
  */
 
+
 import android.graphics.Color;
 import com.oreilly.demo.android.pa.uidemo.model.MonsterWithCoordinates;
 
@@ -12,12 +13,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-//Performs the technical calculations to determine how the monsters move.
-//The recursion may seem extremely expensive, but the scenareo where monsters are trapped
-//are not very frequent, and modifications near the end of the path are usually sufficient.
-//Thus, the base case will be reached quickly, which immediately kills the recursion.
-//If the number of iterations creeps up too much, we explicitly will generate new random movements
-//and start over
+
+/*
+Performs the technical calculations to determine how the monsters move.
+The recursion may seem extremely expensive, but the scenareo where monsters are trapped
+are not very frequent, and modifications near the end of the path are usually sufficient.
+Thus, the base case will be reached quickly, which immediately kills the recursion.
+If the number of iterations creeps up too much, we explicitly will generate new random movements
+and start over
+
+This class may have use in an application where one has objects which must move to distinct
+locations every tick.
+ */
+
 
 public class Find_Path {
 
