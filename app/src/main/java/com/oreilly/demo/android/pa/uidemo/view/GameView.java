@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.oreilly.demo.android.pa.uidemo.controller.Board_Calculations;
+import com.oreilly.demo.android.pa.uidemo.controller.MonstersGameController;
 import com.oreilly.demo.android.pa.uidemo.model.Constants;
 import com.oreilly.demo.android.pa.uidemo.controller.MonsterGame;
 
@@ -68,7 +69,8 @@ public class GameView extends View {
     //Displays the score
     public void set_textview(int value)
     {
-        TextView view = (TextView)((DefaultClockModel)(monsterGame.getClockModel())).getScore_view();
+        TextView view = (TextView) (new MonstersGameController().getScore_view());
+        //TextView view = (TextView)((DefaultClockModel)(monsterGame.getClockModel())).getScore_view();
         view.setText("Current Score: " + new Integer(value).toString()  + "\n" +
         "Time Remaining: " + new Float(monsterGame.getClockModel().get_time_to_wait()).toString());
     }

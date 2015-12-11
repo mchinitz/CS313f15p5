@@ -1,6 +1,9 @@
 package com.oreilly.demo.android.pa.uidemo.controller;
 
 
+import android.app.Activity;
+import android.os.Bundle;
+
 import com.oreilly.demo.android.pa.uidemo.controller.MonstersGameController;
 import com.oreilly.demo.android.pa.uidemo.model.Constants;
 import com.oreilly.demo.android.pa.uidemo.model.clock.ClockModel;
@@ -20,9 +23,10 @@ import java.util.TimerTask;
 
 //Purpose of this is to use command pattern. Encapsulate the command run using the object
 
-//Entire point of extending MonstersGameController is to be able to call runOnUiThread, and
-//to reset content view
-public abstract class DefaultClockModel extends MonstersGameController implements ClockModel {
+//This can be considered an activity in an abstract sense. Although it is not used as an independent activity here.
+// The main goal of extending Activity is to be able to use RunOnUiThread. There is no reason why the clock model
+    //could not itself become a separate Android activity, if a view were provided for it.
+public abstract class DefaultClockModel extends Activity implements ClockModel {
 
     private Timer timer;
     private int time_to_wait;
@@ -94,7 +98,7 @@ public abstract class DefaultClockModel extends MonstersGameController implement
                         throw new RuntimeException();
                     }
 
-                    runOnUiThread (() -> {
+                    runOnUiThread(() -> {
                         if (method_to_fire())
                             return;
                     });
@@ -114,4 +118,5 @@ public abstract class DefaultClockModel extends MonstersGameController implement
 
         timer.cancel();
     }
+
 }

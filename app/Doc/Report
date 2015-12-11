@@ -1,0 +1,22 @@
+    Since we were using MVC rather than MVA, we made our model very small. The model only has
+monsters, a clock, and constants. There are no functions in the model which update the monsters'
+positions. The view is also restricted to updating the canvas. The controller contains the beef of
+the code, acting as an "interface" between the model and the view. It instructs the monsters to move
+and calls upon the view to redraw the canvas.
+    The Single Responsibility Principle played a role in how we wrote the views so that they only updated the canvas.
+The BoardCalculations class, originally part of GameView, allows the calculations that define the
+board and monsters' positions to be done elsewhere (also shortening the class). The Substitution
+Principle enables the DefaultClockModel to be used as a separate Android activity (if a view
+were provided for it and an onCreate method wrote)- this is consistent with how the clock model could be used abstractly.
+But any such activity would have to stop after a finite time, thereby using "is_expired" to mean whether the time has elapsed yet.
+The interface segregation principle played a role in using monster_observer to extend observer, for a designer wanting to use
+the observer interface for the Observer Pattern need not deal with coordinates.
+    We had to slightly violate the Single Responsibility Principle by adding a queue to the DefaultClockModel.
+The queue had little to do with the functionality of the clock, but was necessary to allow the roboelectric
+test to work. The problem was the UIThread could never empty the queue because it was already busy running
+the roboelectric test, so we needed a way to explicitly call the methods that the timer had fired.
+The timer-based concurrency greatly simplified the code. Outside of DefaultClockModel (and roboelectric),
+I didn't have to deal with concurrency, for all of the code was run exclusively on the UiThread.
+If I had used autonomous monsters, each their own thread (or timer), I would have had to coordinate
+the movements (especially difficult here given that the movements depended on each other so that
+the monsters would not collide).
